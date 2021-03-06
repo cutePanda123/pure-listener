@@ -1,13 +1,23 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+  HeaderStyleInterpolators,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import Home from '../pages/Home';
 import Detail from '../pages/Detail';
+import { Platform, StyleSheet } from 'react-native';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
-  Detail: undefined;
+  Detail: {
+    id: number;
+  };
 };
+
+export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
 
 let Stack = createStackNavigator<RootStackParamList>();
 class Navigator extends React.Component {
@@ -15,8 +25,21 @@ class Navigator extends React.Component {
     return (
       <NavigationContainer>
         <Stack.Navigator
+          headerMode="float"
           screenOptions={{
             headerTitleAlign: 'center',
+            headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+            headerStyle: {
+              ...Platform.select({
+                android: {
+                  elevation: 0,
+                  borderBottomWidth: StyleSheet.hairlineWidth,
+                }
+              })
+            }
           }}>
           <Stack.Screen
             options={{

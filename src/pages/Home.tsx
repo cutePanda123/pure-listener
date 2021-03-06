@@ -1,13 +1,27 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
+import { RootStackNavigation } from '../navigator';
 
-class Home extends React.Component {
+interface IProps {
+  navigation: RootStackNavigation
+};
+
+class Home extends React.Component<IProps> {
   render(): JSX.Element {
+    this.props;
     return (
       <View>
         <Text>Home</Text>
+        <Button title="Jump to details" onPress={this.onPress} />
       </View>
     );
+  }
+
+  onPress = () => {
+    const navigation = this.props.navigation;
+    navigation.navigate("Detail", {
+      id: 100,
+    });
   }
 }
 
