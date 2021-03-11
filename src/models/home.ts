@@ -1,3 +1,4 @@
+import { resolvePlugin } from '@babel/core';
 import {Effect, Model} from 'dva-core-ts';
 import { Reducer } from 'redux';
 
@@ -15,13 +16,19 @@ interface HomeModel extends Model {
   reducers: {
       add: Reducer<HomeState>;
   };
-//   effects: {
-//     asyncAdd: Effect;
-//   };
+  effects: {
+    asyncAdd: Effect;
+  };
 }
 
 const initialState = {
     num: 0,
+};
+
+const delay = (timeout: number) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
 }
 
 const homeModel: HomeModel = {
@@ -33,6 +40,15 @@ const homeModel: HomeModel = {
                 ...state,
                 num: state.num + payload.num,
             }
+        }
+    },
+    effects: {
+        *asyncAdd({payload}, {call, put}) {
+            yield call(delay, 3000);
+            yield put({
+                type: 'add',
+                payload,
+            });
         }
     }
 }

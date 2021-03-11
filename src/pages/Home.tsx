@@ -23,6 +23,7 @@ class Home extends React.Component<IProps> {
       <View>
         <Text>Home{num}</Text>
         <Button title="Add Number" onPress={this.addHandler} />
+        <Button title="Async Add Number" onPress={this.asyncAddHandler} />
         <Button title="Jump to details" onPress={this.onPress} />
       </View>
     );
@@ -35,12 +36,22 @@ class Home extends React.Component<IProps> {
     });
   }
 
-  addHandler =() => {
+  addHandler = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'home/add',
       payload: {
         num: 10,
+      }
+    });
+  }
+
+  asyncAddHandler = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'home/asyncAdd',
+      payload: {
+        num: 20,
       }
     });
   }
