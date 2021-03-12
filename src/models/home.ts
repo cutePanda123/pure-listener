@@ -4,6 +4,7 @@ import { Reducer } from 'redux';
 
 export interface HomeState {
     num: number;
+    loading: boolean;
 }
 
 const action = {
@@ -15,6 +16,7 @@ interface HomeModel extends Model {
   state: HomeState;
   reducers: {
       add: Reducer<HomeState>;
+      setStatus: Reducer<HomeState>;
   };
   effects: {
     asyncAdd: Effect;
@@ -23,6 +25,7 @@ interface HomeModel extends Model {
 
 const initialState = {
     num: 0,
+    loading: false,
 };
 
 const delay = (timeout: number) => {
@@ -39,15 +42,33 @@ const homeModel: HomeModel = {
             return {
                 ...state,
                 num: state.num + payload.num,
-            }
+            };
+        },
+        setStatus(state = initialState, {payload}) {
+            return {
+                ...state,
+                loading: payload.loading,
+            };
         }
     },
     effects: {
         *asyncAdd({payload}, {call, put}) {
+            yield put({
+                type: 'setStatus',
+                payload: {
+                    loading: true,
+                },
+            });
             yield call(delay, 3000);
             yield put({
                 type: 'add',
                 payload,
+            });
+            yield put({
+                type: 'setStatus',
+                payload: {
+                    loading: false,
+                },
             });
         }
     }

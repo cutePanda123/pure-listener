@@ -6,7 +6,8 @@ import { RootState } from '@/models/index';
 
 const mapStateToProps = (state: RootState) => ({
   num: state.home.num,
-})
+  loading: state.home.loading,
+});
 
 const connector = connect(mapStateToProps);
 
@@ -18,10 +19,10 @@ interface IProps extends ModelState {
 
 class Home extends React.Component<IProps> {
   render(): JSX.Element {
-    const { num } = this.props;
+    const { num, loading } = this.props;
     return (
       <View>
-        <Text>Home{num}</Text>
+        {loading ? <Text>Loading....</Text> : <Text>Home{num}</Text>}
         <Button title="Add Number" onPress={this.addHandler} />
         <Button title="Async Add Number" onPress={this.asyncAddHandler} />
         <Button title="Jump to details" onPress={this.onPress} />
