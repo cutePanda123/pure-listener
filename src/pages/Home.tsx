@@ -6,7 +6,7 @@ import { RootState } from '@/models/index';
 
 const mapStateToProps = (state: RootState) => ({
   num: state.home.num,
-  loading: state.home.loading,
+  loading: state.loading.effects['home/asyncAdd'],
 });
 
 const connector = connect(mapStateToProps);

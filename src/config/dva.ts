@@ -1,5 +1,6 @@
 import { create } from 'dva-core-ts';
 import models from '@/models/index';
+import creatLoading from 'dva-loading-ts';
 
 // 1. create a dva instance
 const app = create();
@@ -8,7 +9,11 @@ const app = create();
 models.forEach(model => {
     app.model(model);
 })
-// 3. start dva
+
+// 3. add a plugin to dva
+app.use(creatLoading());
+
+// 4. start dva
 app.start();
 
 // 4. export dva
