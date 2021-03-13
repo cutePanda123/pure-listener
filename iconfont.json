@@ -1,0 +1,8 @@
+{
+    "symbol_url": "http://at.alicdn.com/t/font_2417757_51ku130vuxa.js",
+    "use_typescript": true,
+    "save_dir": "./src/assets/iconfont",
+    "trim_icon_prefix": "",
+    "default_icon_size": 18,
+    "summary_component_name": "Icon"
+}

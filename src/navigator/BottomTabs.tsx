@@ -7,6 +7,7 @@ import Account from '@/pages/Account';
 import {RootStackNavigation, RootStackParamList} from '.';
 import {TabNavigationState} from '@react-navigation/routers';
 import {RouteProp} from '@react-navigation/core';
+import IconFont from '@/assets/iconfont';
 
 export type BottomTabParamList = {
   Home: undefined;
@@ -26,7 +27,7 @@ interface IProps {
   route: Route;
 }
 
-const getHeaderTitle = (route: Route) : string => {
+const getHeaderTitle = (route: Route): string => {
   const routeName = route.state
     ? route.state.routes[route.state.index].name
     : route.params?.screen || 'Home';
@@ -47,10 +48,50 @@ class BottomTabs extends React.Component<IProps> {
         tabBarOptions={{
           activeTintColor: '#f86442',
         }}>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Listen" component={Listen} />
-        <Tab.Screen name="Found" component={Found} />
-        <Tab.Screen name="Account" component={Account} />
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({color, size}) => (
+              <IconFont
+                name="icon-Homehomepagemenu"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Listen"
+          component={Listen}
+          options={{
+            tabBarLabel: 'Listen',
+            tabBarIcon: ({color, size}) => (
+              <IconFont name="icon-star" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Found"
+          component={Found}
+          options={{
+            tabBarLabel: 'Found',
+            tabBarIcon: ({color, size}) => (
+              <IconFont name="icon-Discovery" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Account"
+          component={Account}
+          options={{
+            tabBarLabel: 'Account',
+            tabBarIcon: ({color, size}) => (
+              <IconFont name="icon-user" color={color} size={size} />
+            ),
+          }}
+        />
       </Tab.Navigator>
     );
   }
