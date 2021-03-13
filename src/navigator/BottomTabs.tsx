@@ -8,9 +8,10 @@ import {RootStackNavigation, RootStackParamList} from '.';
 import {TabNavigationState} from '@react-navigation/routers';
 import {RouteProp} from '@react-navigation/core';
 import IconFont from '@/assets/iconfont';
+import HomeTabs from './HomeTabs';
 
 export type BottomTabParamList = {
-  Home: undefined;
+  HomeTabs: undefined;
   Listen: undefined;
   Found: undefined;
   Account: undefined;
@@ -30,7 +31,7 @@ interface IProps {
 const getHeaderTitle = (route: Route): string => {
   const routeName = route.state
     ? route.state.routes[route.state.index].name
-    : route.params?.screen || 'Home';
+    : route.params?.screen || 'HomeTabs';
   return routeName;
 };
 
@@ -49,8 +50,8 @@ class BottomTabs extends React.Component<IProps> {
           activeTintColor: '#f86442',
         }}>
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="HomeTabs"
+          component={HomeTabs}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({color, size}) => (
