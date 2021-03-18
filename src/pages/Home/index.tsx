@@ -3,6 +3,7 @@ import {View, Text, Button} from 'react-native';
 import { RootStackNavigation } from '../../navigator';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/models/index';
+import Carousel from './Carousel';
 
 const mapStateToProps = (state: RootState) => ({
   num: state.home.num,
@@ -26,6 +27,8 @@ class Home extends React.Component<IProps> {
         <Button title="Add Number" onPress={this.addHandler} />
         <Button title="Async Add Number" onPress={this.asyncAddHandler} />
         <Button title="Jump to details" onPress={this.onPress} />
+        <Carousel />
+        <Button title="Jump to details123" onPress={this.onPress} />
       </View>
     );
   }
