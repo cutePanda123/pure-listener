@@ -1,14 +1,17 @@
 import { hp } from '@/utils/';
 import { viewPortWidth, wp } from '@/utils/';
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import SnapCarousel, { AdditionalParallaxProps } from 'react-native-snap-carousel';
 import { Image } from 'react-native';
 
 const imageUrls: string[] = [
-    "https://media.newyorker.com/photos/5f414de2840e569c23e39066/master/w_2560%2Cc_limit/Wright-Panda01.jpg",
-    "https://media.newyorker.com/photos/5f414de2840e569c23e39066/master/w_2560%2Cc_limit/Wright-Panda01.jpg",
-    "https://media.newyorker.com/photos/5f414de2840e569c23e39066/master/w_2560%2Cc_limit/Wright-Panda01.jpg"
+    "https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/1.jpg",
+    "https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/2.jpg",
+    "https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/3.jpg",
+    "https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/4.jpg",
+    "https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/5.jpg",
+    "https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/6.jpg"
 ];
 
 const sliderWidth = viewPortWidth;
@@ -19,7 +22,6 @@ const itemWidth = sideWidth + wp(2) * 2;
 class Carousel extends React.Component {
     renderItem = ({item}: {item: string}, parallaxProps?: AdditionalParallaxProps)  => {
         return (
-            //<Text>Example Text</Text>
             <Image source={{uri: item}} style={styles.image}/>
         );
     }
