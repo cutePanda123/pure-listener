@@ -1,3 +1,4 @@
+import { ICarouselImage } from '@/models/home';
 import { hp } from '@/utils/';
 import { viewPortWidth, wp } from '@/utils/';
 import React from 'react';
@@ -18,7 +19,11 @@ const sideWidth = wp(90);
 const sideHeight = hp(26);
 const itemWidth = sideWidth + wp(2) * 2;
 
-class Carousel extends React.Component<any, any> {
+interface IProps {
+    data: ICarouselImage[];
+}
+
+class Carousel extends React.Component<IProps, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -27,12 +32,13 @@ class Carousel extends React.Component<any, any> {
     }
 
     get pagination() {
+        const images = this.props.data;
         const {activeSlideIndex} = this.state;
         return (
             <View style={styles.paginationWrapper}>
                 <Pagination
                     activeDotIndex={activeSlideIndex}
-                    dotsLength={imageUrls.length}
+                    dotsLength={images.length}
                     containerStyle={styles.paginationContainer}
                     dotContainerStyle={styles.dotContainer}
                     dotStyle={styles.dot}
@@ -43,10 +49,10 @@ class Carousel extends React.Component<any, any> {
         )
     }
 
-    renderItem = ({ item }: { item: string }, parallaxProps?: AdditionalParallaxProps) => {
+    renderItem = ({ item }: { item: ICarouselImage }, parallaxProps?: AdditionalParallaxProps) => {
         return (
             <ParallaxImage 
-                source={{ uri: item }} 
+                source={{ uri: item.real_image }} 
                 style={styles.iamge} 
                 containerStyle={styles.imageContainer}
                 parallaxFactor={0.8}
@@ -56,11 +62,12 @@ class Carousel extends React.Component<any, any> {
         );
     }
     render() {
+        const images = this.props.data;
         return (
             <View>
                 <SnapCarousel
                     renderItem={this.renderItem}
-                    data={imageUrls}
+                    data={images}
                     sliderWidth={sliderWidth}
                     itemWidth={itemWidth}
                     hasParallaxImages={true}

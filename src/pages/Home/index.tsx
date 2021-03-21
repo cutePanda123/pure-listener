@@ -6,8 +6,8 @@ import { RootState } from '@/models/index';
 import Carousel from './Carousel';
 
 const mapStateToProps = (state: RootState) => ({
-  num: state.home.num,
-  loading: state.loading.effects['home/asyncAdd'],
+  carouselImages: state.home.carouselImages,
+  loading: state.loading.effects['home/fetchCarouselImages'],
 });
 
 const connector = connect(mapStateToProps);
@@ -20,42 +20,28 @@ interface IProps extends ModelState {
 
 class Home extends React.Component<IProps> {
   render(): JSX.Element {
-    const { num, loading } = this.props;
+    const { carouselImages, loading } = this.props;
     return (
       <View>
-        {loading ? <Text>Loading....</Text> : <Text>Home{num}</Text>}
-        <Button title="Add Number" onPress={this.addHandler} />
-        <Button title="Async Add Number" onPress={this.asyncAddHandler} />
-        <Button title="Jump to details" onPress={this.onPress} />
-        <Carousel />
+        {loading ? <Text>Loading....</Text> : <Text>Home loaded</Text>}
+        <Carousel 
+          data={carouselImages}
+        />
       </View>
     );
+  }
+  
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'home/fetchCarouselImages',
+    });
   }
 
   onPress = () => {
     const navigation = this.props.navigation;
     navigation.navigate("Detail", {
       id: 100,
-    });
-  }
-
-  addHandler = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'home/add',
-      payload: {
-        num: 10,
-      }
-    });
-  }
-
-  asyncAddHandler = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'home/asyncAdd',
-      payload: {
-        num: 20,
-      }
     });
   }
 }

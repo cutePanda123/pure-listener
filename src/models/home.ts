@@ -1,53 +1,56 @@
 import { resolvePlugin } from '@babel/core';
 import {Effect, Model} from 'dva-core-ts';
 import { Reducer } from 'redux';
+import axios from 'axios';
+
+const CAROUSEL_IMAGE_ENDPOINT = '/mock/29/carousel';
+
+export interface ICarouselImage {
+    id: string;
+    imageURL: string;
+    colors: [string, string],
+    real_image: string,
+};
 
 export interface HomeState {
-    num: number;
-}
-
-const action = {
-    type: 'add',
+    carouselImages: ICarouselImage[];
 }
 
 interface HomeModel extends Model {
   namespace: 'home';
   state: HomeState;
   reducers: {
-      add: Reducer<HomeState>;
+      setState: Reducer<HomeState>;
   };
   effects: {
-    asyncAdd: Effect;
+    fetchCarouselImages: Effect;
   };
 }
 
-const initialState = {
-    num: 0,
+const initialState: HomeState = {
+    carouselImages: [],
 };
-
-const delay = (timeout: number) => {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
-}
 
 const homeModel: HomeModel = {
     namespace: 'home',
     state: initialState,
     reducers: {
-        add(state = initialState, { payload }) {
+        setState(state = initialState, { payload }) {
             return {
                 ...state,
-                num: state.num + payload.num,
+                ...payload,
             };
         },
     },
     effects: {
-        *asyncAdd({payload}, {call, put}) {
-            yield call(delay, 3000);
+        *fetchCarouselImages(_, {call, put}) {
+            const {data, state, msg} = yield call(axios.get, CAROUSEL_IMAGE_ENDPOINT);
+            console.log('carousel images data: ', data);
             yield put({
-                type: 'add',
-                payload,
+                type: 'setState',
+                payload: {
+                    carouselImages: data,
+                },
             });
         }
     }
