@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Config from 'react-native-config';
 
+console.log("config loaded from env file:", Config);
 axios.defaults.baseURL = Config.API_URL; //'http://192.168.29.111:3002'; //Config.API_URL; // local yapi ip and port in dev env//
 
 // request interceptor
