@@ -1,0 +1,43 @@
+[
+  {
+    "index": 0,
+    "name": "home_view",
+    "desc": null,
+    "add_time": 1616339329,
+    "up_time": 1616339329,
+    "list": [
+      {
+        "query_path": {
+          "path": "/carousel",
+          "params": []
+        },
+        "edit_uid": 0,
+        "status": "undone",
+        "type": "static",
+        "req_body_is_json_schema": true,
+        "res_body_is_json_schema": true,
+        "api_opened": false,
+        "index": 0,
+        "tag": [],
+        "_id": 17,
+        "method": "GET",
+        "catid": 17,
+        "title": "carousel_api",
+        "path": "/carousel",
+        "project_id": 29,
+        "req_params": [],
+        "res_body_type": "json",
+        "uid": 20,
+        "add_time": 1616339372,
+        "up_time": 1616347391,
+        "req_query": [],
+        "req_headers": [],
+        "req_body_form": [],
+        "__v": 0,
+        "desc": "",
+        "markdown": "",
+        "res_body": "{\"type\":\"object\",\"title\":\"empty object\",\"properties\":{\"status\":{\"type\":\"number\",\"mock\":{\"mock\":\"100\"}},\"msg\":{\"type\":\"string\",\"mock\":{\"mock\":\"success\"}},\"data\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"mock\":{\"mock\":\"@id\"}},\"imageURL\":{\"type\":\"string\",\"mock\":{\"mock\":\"@image('400x150')\"}},\"colors\":{\"type\":\"array\",\"items\":{\"type\":\"string\",\"mock\":{\"mock\":\"@color\"}}},\"real_image\":{\"type\":\"string\",\"mock\":{\"mock\":\"http://39.105.213.120/images/@integer(1,61).jpg\"}}},\"required\":[\"id\",\"imageURL\",\"colors\"]}}},\"required\":[\"status\",\"msg\",\"data\"]}"
+      }
+    ]
+  }
+]
