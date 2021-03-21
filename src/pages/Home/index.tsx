@@ -28,7 +28,6 @@ class Home extends React.Component<IProps> {
         <Button title="Async Add Number" onPress={this.asyncAddHandler} />
         <Button title="Jump to details" onPress={this.onPress} />
         <Carousel />
-        <Button title="Jump to details123" onPress={this.onPress} />
       </View>
     );
   }
