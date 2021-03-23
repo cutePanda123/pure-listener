@@ -4,6 +4,7 @@ import { RootStackNavigation } from '../../navigator';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/models/index';
 import Carousel from './Carousel';
+import GuessYouLike from './GuessYouLike';
 
 const mapStateToProps = (state: RootState) => ({
   carouselImages: state.home.carouselImages,
@@ -23,9 +24,12 @@ class Home extends React.Component<IProps> {
     const { carouselImages, loading } = this.props;
     return (
       <View>
-        {loading ? <Text>Loading....</Text> : <Text>Home loaded</Text>}
+        {loading ? <Text>Loading....</Text> : null}
         <Carousel 
           data={carouselImages}
+        />
+        <GuessYouLike
+
         />
       </View>
     );

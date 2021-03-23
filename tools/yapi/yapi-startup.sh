@@ -1,5 +1,5 @@
 brew services start mongodb-community
-cd ~/Application/yapi
+cd ~/Applications/yapi
 node vendors/server/app.js
 
 #local testing account

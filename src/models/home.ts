@@ -4,6 +4,7 @@ import { Reducer } from 'redux';
 import axios from 'axios';
 
 const CAROUSEL_IMAGE_ENDPOINT = '/mock/29/carousel';
+const GUESS_YOU_LIKE_IMAGE_ENDPOINT = '/mock/29/guess';
 
 export interface ICarouselImage {
     id: string;
@@ -12,8 +13,15 @@ export interface ICarouselImage {
     real_image: string,
 };
 
+export interface IGuessYouLikeImage {
+    id: string;
+    title: string;
+    imageURL: string;
+};
+
 export interface HomeState {
     carouselImages: ICarouselImage[];
+    guessImages: IGuessYouLikeImage[];
 }
 
 interface HomeModel extends Model {
@@ -24,11 +32,13 @@ interface HomeModel extends Model {
   };
   effects: {
     fetchCarouselImages: Effect;
+    fetchGuessImages: Effect;
   };
 }
 
 const initialState: HomeState = {
     carouselImages: [],
+    guessImages: [],
 };
 
 const homeModel: HomeModel = {
@@ -50,6 +60,16 @@ const homeModel: HomeModel = {
                 type: 'setState',
                 payload: {
                     carouselImages: data,
+                },
+            });
+        },
+        *fetchGuessImages(_, {call, put}) {
+            const {data, state, msg} = yield call(axios.get, GUESS_YOU_LIKE_IMAGE_ENDPOINT);
+            console.log('guess images data: ', data);
+            yield put({
+                type: 'setState',
+                payload: {
+                    guessImages: data,
                 },
             });
         }
