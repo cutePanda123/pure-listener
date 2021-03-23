@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Image, Alert} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootState} from '@/models/index';
+import { TouchableOpacity } from 'react-native';
+import { IGuessYouLikeImage } from '@/models/home';
 
 const mapStateToProps = ({home} : RootState) => {
     return {
@@ -25,12 +27,16 @@ class GuessYouLike extends React.Component<ModelState> {
         });
     }
 
-    renderItem = ({item}) => {
+    renderItem = ({item}: {item: IGuessYouLikeImage}) => {
         return (
-            <View style={styles.item}>
+            <TouchableOpacity
+                style={styles.item}
+                onPress={() => {
+                    alert('haha');
+                }}>
                 <Image source={{uri: item.imageURL}} style={styles.image} />
                 <Text numberOfLines={2}>{item.title}</Text>
-            </View>
+            </TouchableOpacity>
         );
     }
 
