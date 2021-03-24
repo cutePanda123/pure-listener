@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+import {ScrollView, Text } from 'react-native';
 import { RootStackNavigation } from '../../navigator';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/models/index';
@@ -23,7 +23,7 @@ class Home extends React.Component<IProps> {
   render(): JSX.Element {
     const { carouselImages, loading } = this.props;
     return (
-      <View>
+      <ScrollView>
         {loading ? <Text>Loading....</Text> : null}
         <Carousel 
           data={carouselImages}
@@ -31,7 +31,7 @@ class Home extends React.Component<IProps> {
         <GuessYouLike
 
         />
-      </View>
+      </ScrollView>
     );
   }
   

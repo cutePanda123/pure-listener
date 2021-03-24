@@ -56,10 +56,17 @@ class GuessYouLike extends React.Component<ModelState> {
                     </View>
                 </View>
                 <FlatList
+                    style={styles.imageList}
                     numColumns={3}
                     data={guessImages}
                     renderItem={this.renderItem}
                 />
+                <Touchable
+                    style={styles.seeMore}
+                    onPress={() => {this.fetch()}}>
+                    <IconFont name='icon-exchangerate' color='red' />
+                    <Text style={styles.seeMoreText}>See More</Text>
+                </Touchable>
             </View>
         );
     }
@@ -91,6 +98,7 @@ const styles = StyleSheet.create({
     },
     headerLeft: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     headerTitle: {
         marginLeft: 5,
@@ -101,6 +109,19 @@ const styles = StyleSheet.create({
     },
     headerRight: {
         flexDirection: 'row',
+        alignItems: 'center',
+    },
+    seeMore: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+    },
+    seeMoreText: {
+        marginLeft: 5,
+    },
+    imageList: {
+        padding: 10,
     },
 });
 
