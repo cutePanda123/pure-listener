@@ -46,9 +46,14 @@ class GuessYouLike extends React.Component<ModelState> {
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <IconFont name="icon-star" />
-                    <Text>Guess You Like</Text>
-                    <Text>More</Text>
+                    <View style={styles.headerLeft}>
+                        <IconFont name="icon-like" />
+                        <Text style={styles.headerTitle}>Guess You Like</Text>
+                    </View>
+                    <View style={styles.headerRight}>
+                        <Text style={styles.headerMore}>More</Text>
+                        <IconFont name="icon-more" />
+                    </View>
                 </View>
                 <FlatList
                     numColumns={3}
@@ -83,7 +88,20 @@ const styles = StyleSheet.create({
         padding: 15,
         borderBottomColor: '#efefef',
         borderBottomWidth: StyleSheet.hairlineWidth,
-    }
+    },
+    headerLeft: {
+        flexDirection: 'row',
+    },
+    headerTitle: {
+        marginLeft: 5,
+        color: '#333',
+    },
+    headerMore: {
+        color: '#6f6f6f',
+    },
+    headerRight: {
+        flexDirection: 'row',
+    },
 });
 
 export default connector(GuessYouLike);
