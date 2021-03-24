@@ -2,8 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, FlatList, Image, Alert} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootState} from '@/models/index';
-import { TouchableOpacity } from 'react-native';
+import Touchable from '@/components/Touchable';
 import { IGuessYouLikeImage } from '@/models/home';
+import IconFont from '@/assets/iconfont';
 
 const mapStateToProps = ({home} : RootState) => {
     return {
@@ -29,14 +30,14 @@ class GuessYouLike extends React.Component<ModelState> {
 
     renderItem = ({item}: {item: IGuessYouLikeImage}) => {
         return (
-            <TouchableOpacity
+            <Touchable
                 style={styles.item}
                 onPress={() => {
-                    alert('haha');
+                    console.log('haha');
                 }}>
                 <Image source={{uri: item.imageURL}} style={styles.image} />
                 <Text numberOfLines={2}>{item.title}</Text>
-            </TouchableOpacity>
+            </Touchable>
         );
     }
 
@@ -44,6 +45,11 @@ class GuessYouLike extends React.Component<ModelState> {
         const {guessImages} = this.props;
         return (
             <View style={styles.container}>
+                <View style={styles.header}>
+                    <IconFont name="icon-star" />
+                    <Text>Guess You Like</Text>
+                    <Text>More</Text>
+                </View>
                 <FlatList
                     numColumns={3}
                     data={guessImages}
@@ -71,6 +77,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 10,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 15,
+        borderBottomColor: '#efefef',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    }
 });
 
 export default connector(GuessYouLike);
