@@ -23,6 +23,18 @@ interface IProps extends ModelState {
 };
 
 class Home extends React.Component<IProps> {
+  render(): JSX.Element {
+    const { carouselImages, loading, channels } = this.props;
+    return (
+      <FlatList
+          data={channels}
+          renderItem={this.renderItem}
+          ListHeaderComponent={this.renderHeader}
+          keyExtractor={this.keyExtractor}
+        />
+    );
+  }
+
   get renderHeader() {
     const { carouselImages, loading } = this.props;
     return (
@@ -36,21 +48,15 @@ class Home extends React.Component<IProps> {
     );
   }
 
-  render(): JSX.Element {
-    const { carouselImages, loading, channels } = this.props;
-    return (
-      <FlatList
-          data={channels}
-          renderItem={this.renderItem}
-          ListHeaderComponent={this.renderHeader}
-        />
-    );
+  keyExtractor = (item: IChannel) => {
+    return item.id;
   }
 
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
     return (
       <ChannelItem 
         data={item}
+        onPressHandler={this.onPress}
       />
     );
   }
@@ -65,11 +71,8 @@ class Home extends React.Component<IProps> {
     });
   }
 
-  onPress = () => {
-    const navigation = this.props.navigation;
-    navigation.navigate("Detail", {
-      id: 100,
-    });
+  onPress = (data: IChannel) => {
+    console.log('print data from onPress:', data);
   }
 }
 
