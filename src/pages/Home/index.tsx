@@ -23,20 +23,27 @@ interface IProps extends ModelState {
 };
 
 class Home extends React.Component<IProps> {
-  render(): JSX.Element {
-    const { carouselImages, loading, channels } = this.props;
+  get renderHeader() {
+    const { carouselImages, loading } = this.props;
     return (
-      <ScrollView>
+      <View>
         {loading ? <Text>Loading....</Text> : null}
         <Carousel 
           data={carouselImages}
         />
         <GuessYouLike/>
-        <FlatList
+      </View>
+    );
+  }
+
+  render(): JSX.Element {
+    const { carouselImages, loading, channels } = this.props;
+    return (
+      <FlatList
           data={channels}
           renderItem={this.renderItem}
+          ListHeaderComponent={this.renderHeader}
         />
-      </ScrollView>
     );
   }
 
