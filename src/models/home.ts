@@ -86,7 +86,7 @@ const homeModel: HomeModel = {
                 },
             });
         },
-        *fetchChannelData(_, {call, put}) {
+        *fetchChannelData(action, {call, put}) {
             const {data, state, msg} = yield call(axios.get, CHANNEL_DATA_ENDPOINT);
             console.log('channel data: ', data);
             yield put({
@@ -95,6 +95,9 @@ const homeModel: HomeModel = {
                     channels: data.results,
                 },
             });
+            if (typeof action.callback === 'function') {
+                action.callback();
+            }
         }
     }
 }

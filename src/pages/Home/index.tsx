@@ -22,17 +22,47 @@ interface IProps extends ModelState {
   navigation: RootStackNavigation
 };
 
-class Home extends React.Component<IProps> {
+interface IState {
+  refreshing: boolean;
+}
+
+class Home extends React.Component<IProps, IState> {
+  constructor (props: IProps) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
   render(): JSX.Element {
     const { carouselImages, loading, channels } = this.props;
+    const { refreshing } = this.state;
     return (
       <FlatList
           data={channels}
           renderItem={this.renderItem}
           ListHeaderComponent={this.renderHeader}
           keyExtractor={this.keyExtractor}
+          onRefresh={this.onRefresh}
+          refreshing={refreshing}
         />
     );
+  }
+
+  onRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'home/fetchChannelData',
+      callback: () => {
+        this.setState({
+          refreshing: false,
+        });
+      }
+    });
   }
 
   get renderHeader() {
