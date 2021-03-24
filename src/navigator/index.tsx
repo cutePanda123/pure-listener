@@ -36,7 +36,6 @@ class Navigator extends React.Component {
             gestureDirection: 'horizontal',
             headerStatusBarHeight: StatusBar.currentHeight,
             headerStyle: {
-              backgroundColor: 'red',
               ...Platform.select({
                 android: {
                   elevation: 0,
@@ -47,14 +46,14 @@ class Navigator extends React.Component {
           }}>
           <Stack.Screen
             options={{
-              headerTitle: 'Home Page',
+              headerTitle: 'Home',
             }}
             name="BottomTabs"
             component={BottomTabs}
           />
           <Stack.Screen
             options={{
-              headerTitle: 'Detail Page',
+              headerTitle: 'Detail',
             }}
             name="Detail"
             component={Detail}
