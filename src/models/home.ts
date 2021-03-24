@@ -3,8 +3,9 @@ import {Effect, Model} from 'dva-core-ts';
 import { Reducer } from 'redux';
 import axios from 'axios';
 
-const CAROUSEL_IMAGE_ENDPOINT = '/mock/29/carousel';
-const GUESS_YOU_LIKE_IMAGE_ENDPOINT = '/mock/29/guess';
+const CAROUSEL_DATA_ENDPOINT = '/mock/29/carousel';
+const GUESS_YOU_LIKE_DATA_ENDPOINT = '/mock/29/guess';
+const CHANNEL_DATA_ENDPOINT = '/mock/29/channel';
 
 export interface ICarouselImage {
     id: string;
@@ -19,9 +20,19 @@ export interface IGuessYouLikeImage {
     imageURL: string;
 };
 
+export interface IChannel {
+    id: string;
+    title: string;
+    imageURL: string;
+    remark: string;
+    played_count: number;
+    playing_count: number;
+}
+
 export interface HomeState {
     carouselImages: ICarouselImage[];
     guessImages: IGuessYouLikeImage[];
+    channels: IChannel[];
 }
 
 interface HomeModel extends Model {
@@ -33,12 +44,14 @@ interface HomeModel extends Model {
   effects: {
     fetchCarouselImages: Effect;
     fetchGuessImages: Effect;
+    fetchChannelData: Effect;
   };
 }
 
 const initialState: HomeState = {
     carouselImages: [],
     guessImages: [],
+    channels: [],
 };
 
 const homeModel: HomeModel = {
@@ -54,7 +67,7 @@ const homeModel: HomeModel = {
     },
     effects: {
         *fetchCarouselImages(_, {call, put}) {
-            const {data, state, msg} = yield call(axios.get, CAROUSEL_IMAGE_ENDPOINT);
+            const {data, state, msg} = yield call(axios.get, CAROUSEL_DATA_ENDPOINT);
             console.log('carousel images data: ', data);
             yield put({
                 type: 'setState',
@@ -64,12 +77,22 @@ const homeModel: HomeModel = {
             });
         },
         *fetchGuessImages(_, {call, put}) {
-            const {data, state, msg} = yield call(axios.get, GUESS_YOU_LIKE_IMAGE_ENDPOINT);
+            const {data, state, msg} = yield call(axios.get, GUESS_YOU_LIKE_DATA_ENDPOINT);
             console.log('guess images data: ', data);
             yield put({
                 type: 'setState',
                 payload: {
                     guessImages: data,
+                },
+            });
+        },
+        *fetchChannelData(_, {call, put}) {
+            const {data, state, msg} = yield call(axios.get, CHANNEL_DATA_ENDPOINT);
+            console.log('channel data: ', data);
+            yield put({
+                type: 'setState',
+                payload: {
+                    channels: data.results,
                 },
             });
         }
