@@ -9,7 +9,7 @@ interface IProps {
     onPressHandler: (data: IChannel) => void;
 }
 
-class ChannelItem extends React.Component<IProps> {
+class ChannelItem extends React.PureComponent<IProps> {
     onPress= () => {
         const {onPressHandler, data} = this.props;
         if (typeof onPressHandler === 'function') {
