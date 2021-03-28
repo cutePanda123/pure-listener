@@ -35,11 +35,30 @@ const getHeaderTitle = (route: Route): string => {
 };
 
 class BottomTabs extends React.Component<IProps> {
-  componentDidUpdate() {
+  setNavigationHeader = () => {
     const {navigation, route} = this.props;
-    navigation.setOptions({
-      headerTitle: getHeaderTitle(route),
-    });
+    const routeName = route.state
+    ? route.state.routes[route.state.index].name
+    : route.params?.screen || 'HomeTabs';
+    if (routeName === 'HomeTabs') {
+      navigation.setOptions({
+        headerTransparent: true,
+        headerTitle: '',
+      });
+    } else {
+      navigation.setOptions({
+        headerTransparent: false,
+        headerTitle: getHeaderTitle(route),
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    this.setNavigationHeader();
+  }
+
+  componentDidMount() {
+    this.setNavigationHeader();
   }
 
   render() {
