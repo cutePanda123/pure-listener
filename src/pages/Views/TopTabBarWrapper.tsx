@@ -1,4 +1,5 @@
 import Touchable from '@/components/Touchable';
+import {RootState} from '@/models/';
 import {
   MaterialTopTabBar,
   MaterialTopTabBarProps,
@@ -7,18 +8,34 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
 import LinearGradient from 'react-native-linear-gradient';
- 
-interface IProps extends MaterialTopTabBarProps {}
+import {connect, ConnectedProps} from 'react-redux';
+
+const mapStateToProps = ({home}: RootState) => {
+    console.log('print home: ', home);
+  return {
+    linearColors: home.carouselImages && home.carouselImages.length > home.activeCarouselIndex
+      ? home.carouselImages[home.activeCarouselIndex].colors
+      : undefined,
+  };
+};
+
+const connector = connect(mapStateToProps);
+
+type ModelState = ConnectedProps<typeof connector>;
+
+type IProps = MaterialTopTabBarProps & ModelState;
 
 class TopTabBarWrapper extends React.Component<IProps> {
+  get linearGradient() {
+    const {linearColors = ['#ccc', '#e2e2e2']} = this.props;
+    return <LinearGradient colors={linearColors} style={styles.gradient} />;
+  }
+
   render() {
     const {props} = this;
     return (
       <View style={styles.container}>
-          <LinearGradient
-            colors={['#ccc', '#e2e2e2']}
-            style={styles.gradient}
-          />
+        {this.linearGradient}
         <View style={styles.topTabBarViewTop}>
           <MaterialTopTabBar {...props} style={styles.tabBar} />
           <Touchable style={styles.topTabBarCategory}>
@@ -76,9 +93,9 @@ const styles = StyleSheet.create({
     marginLeft: 24,
   },
   gradient: {
-      ...StyleSheet.absoluteFillObject,
-      height: 260,
-  }
+    ...StyleSheet.absoluteFillObject,
+    height: 260,
+  },
 });
 
-export default TopTabBarWrapper;
+export default connector(TopTabBarWrapper);
