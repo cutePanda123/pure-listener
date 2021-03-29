@@ -118,9 +118,7 @@ class Home extends React.Component<IProps, IState> {
     return (
       <View>
         {loading ? <Text>Loading....</Text> : null}
-        <Carousel 
-          data={carouselImages}
-        />
+        <Carousel />
         <GuessYouLike/>
       </View>
     );
