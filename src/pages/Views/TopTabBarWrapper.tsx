@@ -8,14 +8,16 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
 import LinearGradient from 'react-native-linear-gradient';
+import LinearAnimatedGradientTransition from 'react-native-linear-animated-gradient-transition';
 import {connect, ConnectedProps} from 'react-redux';
 
 const mapStateToProps = ({home}: RootState) => {
-    console.log('print home: ', home);
   return {
-    linearColors: home.carouselImages && home.carouselImages.length > home.activeCarouselIndex
-      ? home.carouselImages[home.activeCarouselIndex].colors
-      : undefined,
+    linearColors:
+      home.carouselImages &&
+      home.carouselImages.length > home.activeCarouselIndex
+        ? home.carouselImages[home.activeCarouselIndex].colors
+        : undefined,
   };
 };
 
@@ -28,7 +30,7 @@ type IProps = MaterialTopTabBarProps & ModelState;
 class TopTabBarWrapper extends React.Component<IProps> {
   get linearGradient() {
     const {linearColors = ['#ccc', '#e2e2e2']} = this.props;
-    return <LinearGradient colors={linearColors} style={styles.gradient} />;
+    return <LinearAnimatedGradientTransition colors={linearColors} style={styles.gradient} />;
   }
 
   render() {

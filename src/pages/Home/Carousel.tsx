@@ -71,6 +71,7 @@ class Carousel extends React.Component<IProps> {
       />
     );
   };
+
   render() {
     const images = this.props.images;
     return (
