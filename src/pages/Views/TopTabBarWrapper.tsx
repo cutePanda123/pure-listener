@@ -18,6 +18,7 @@ const mapStateToProps = ({home}: RootState) => {
       home.carouselImages.length > home.activeCarouselIndex
         ? home.carouselImages[home.activeCarouselIndex].colors
         : undefined,
+    isGradientVisible: home.isGradientVisible,
   };
 };
 
@@ -29,27 +30,45 @@ type IProps = MaterialTopTabBarProps & ModelState;
 
 class TopTabBarWrapper extends React.Component<IProps> {
   get linearGradient() {
-    const {linearColors = ['#ccc', '#e2e2e2']} = this.props;
-    return <LinearAnimatedGradientTransition colors={linearColors} style={styles.gradient} />;
+    const {isGradientVisible, linearColors = ['#ccc', '#e2e2e2']} = this.props;
+    return (
+      isGradientVisible && (
+        <LinearAnimatedGradientTransition
+          colors={linearColors}
+          style={styles.gradient}
+        />
+      )
+    );
   }
 
   render() {
-    const {props} = this;
+    const {isGradientVisible, indicatorStyle, ...restProps} = this.props;
+    const textStyle = isGradientVisible ? styles.whiteText : styles.text;
+    const tintColor = isGradientVisible ? '#fff' : '#333';
+    const updatedIndicatorStyle =
+      isGradientVisible && indicatorStyle
+        ? StyleSheet.compose(indicatorStyle, styles.whiteBackgroundColor)
+        : indicatorStyle;
     return (
       <View style={styles.container}>
         {this.linearGradient}
         <View style={styles.topTabBarViewTop}>
-          <MaterialTopTabBar {...props} style={styles.tabBar} />
+          <MaterialTopTabBar
+            {...restProps}
+            activeTintColor={tintColor}
+            indicatorStyle={updatedIndicatorStyle}
+            style={styles.tabBar}
+          />
           <Touchable style={styles.topTabBarCategory}>
-            <Text>Category</Text>
+            <Text style={textStyle}>Category</Text>
           </Touchable>
         </View>
         <View style={styles.topTabBarViewBottom}>
           <Touchable style={styles.topTabBarSearch}>
-            <Text>Search</Text>
+            <Text style={textStyle}>Search</Text>
           </Touchable>
           <Touchable style={styles.topTabBarHistory}>
-            <Text>History</Text>
+            <Text style={textStyle}>History</Text>
           </Touchable>
         </View>
       </View>
@@ -97,6 +116,15 @@ const styles = StyleSheet.create({
   gradient: {
     ...StyleSheet.absoluteFillObject,
     height: 260,
+  },
+  text: {
+    color: '#333',
+  },
+  whiteText: {
+    color: '#fff',
+  },
+  whiteBackgroundColor: {
+    backgroundColor: '#fff',
   },
 });
 

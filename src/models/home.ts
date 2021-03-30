@@ -42,6 +42,7 @@ export interface HomeState {
   channels: IChannel[];
   pagination: IPagination;
   activeCarouselIndex: number;
+  isGradientVisible: boolean;
 }
 
 interface HomeModel extends Model {
@@ -67,6 +68,7 @@ const initialState: HomeState = {
     hasMore: true,
   },
   activeCarouselIndex: 0,
+  isGradientVisible: true,
 };
 
 const homeModel: HomeModel = {

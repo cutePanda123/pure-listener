@@ -22,7 +22,7 @@ const imageUrls: string[] = [
 
 const sliderWidth = viewPortWidth;
 const sideWidth = wp(90);
-const sideHeight = hp(26);
+export const sideHeight = hp(26);
 const itemWidth = sideWidth + wp(2) * 2;
 
 const mapStateToProps = (state: RootState) => ({

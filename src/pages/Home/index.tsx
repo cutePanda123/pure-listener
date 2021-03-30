@@ -1,18 +1,28 @@
 import React from 'react';
-import {ScrollView, Text, FlatList, View, ListRenderItemInfo, StyleSheet } from 'react-native';
-import { RootStackNavigation } from '../../navigator';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '@/models/index';
-import Carousel from './Carousel';
+import {
+  ScrollView,
+  Text,
+  FlatList,
+  View,
+  ListRenderItemInfo,
+  StyleSheet,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
+import {RootStackNavigation} from '../../navigator';
+import {connect, ConnectedProps} from 'react-redux';
+import {RootState} from '@/models/index';
+import Carousel, {sideHeight} from './Carousel';
 import GuessYouLike from './GuessYouLike';
 import ChannelItem from './ChannelItem';
-import homeModel, { IChannel } from '@/models/home';
+import homeModel, {IChannel} from '@/models/home';
 
 const mapStateToProps = (state: RootState) => ({
   carouselImages: state.home.carouselImages,
   loading: state.loading.effects['home/fetchChannelData'],
   channels: state.home.channels,
   hasMore: state.home.pagination.hasMore,
+  isGradientVisible: state.home.isGradientVisible,
 });
 
 const connector = connect(mapStateToProps);
@@ -20,15 +30,15 @@ const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModelState {
-  navigation: RootStackNavigation
-};
+  navigation: RootStackNavigation;
+}
 
 interface IState {
   refreshing: boolean;
 }
 
 class Home extends React.Component<IProps, IState> {
-  constructor (props: IProps) {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       refreshing: false,
@@ -36,26 +46,43 @@ class Home extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const { carouselImages, loading, channels } = this.props;
-    const { refreshing } = this.state;
+    const {carouselImages, loading, channels} = this.props;
+    const {refreshing} = this.state;
     return (
       <FlatList
-          data={channels}
-          renderItem={this.renderItem}
-          ListHeaderComponent={this.renderHeader}
-          keyExtractor={this.keyExtractor}
-          onRefresh={this.onRefresh}
-          refreshing={refreshing}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={0.2}
-          ListFooterComponent={this.renderFooter}
-          ListEmptyComponent={this.renderEmpty}
-        />
+        data={channels}
+        renderItem={this.renderItem}
+        ListHeaderComponent={this.renderHeader}
+        keyExtractor={this.keyExtractor}
+        onRefresh={this.onRefresh}
+        refreshing={refreshing}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={0.2}
+        ListFooterComponent={this.renderFooter}
+        ListEmptyComponent={this.renderEmpty}
+        onScroll={this.onScrollHanlder}
+      />
     );
   }
 
+  onScrollHanlder = ({
+    nativeEvent,
+  }: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetY = nativeEvent.contentOffset.y;
+    const newIsGradientVisible = offsetY < sideHeight;
+    const {dispatch, isGradientVisible} = this.props;
+    if (isGradientVisible !== newIsGradientVisible) {
+      dispatch({
+        type: 'home/setState',
+        payload: {
+          isGradientVisible: newIsGradientVisible,
+        },
+      });
+    }
+  };
+
   onEndReached = () => {
-    const { dispatch, loading, hasMore } = this.props;
+    const {dispatch, loading, hasMore} = this.props;
     if (loading || !hasMore) {
       return;
     }
@@ -65,23 +92,23 @@ class Home extends React.Component<IProps, IState> {
         loadMore: true,
       },
     });
-  }
+  };
 
   onRefresh = () => {
     this.setState({
       refreshing: true,
     });
 
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     dispatch({
       type: 'home/fetchChannelData',
       callback: () => {
         this.setState({
           refreshing: false,
         });
-      }
+      },
     });
-  }
+  };
 
   get renderFooter() {
     const {loading, hasMore, channels} = this.props;
@@ -110,35 +137,32 @@ class Home extends React.Component<IProps, IState> {
       <View style={styles.empty}>
         <Text>No data</Text>
       </View>
-    )
+    );
   }
 
   get renderHeader() {
-    const { carouselImages, loading } = this.props;
+    const {carouselImages, loading} = this.props;
     return (
       <View>
         {loading ? <Text>Loading....</Text> : null}
         <Carousel />
-        <GuessYouLike/>
+        <View style={styles.background}>
+          <GuessYouLike />
+        </View>
       </View>
     );
   }
 
   keyExtractor = (item: IChannel) => {
     return item.id;
-  }
+  };
 
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
-    return (
-      <ChannelItem 
-        data={item}
-        onPressHandler={this.onPress}
-      />
-    );
-  }
-  
+    return <ChannelItem data={item} onPressHandler={this.onPress} />;
+  };
+
   componentDidMount() {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     dispatch({
       type: 'home/fetchCarouselImages',
     });
@@ -149,7 +173,7 @@ class Home extends React.Component<IProps, IState> {
 
   onPress = (data: IChannel) => {
     console.log('print data from onPress:', data);
-  }
+  };
 }
 
 const styles = StyleSheet.create({
@@ -160,6 +184,9 @@ const styles = StyleSheet.create({
   empty: {
     alignItems: 'center',
     paddingVertical: 100,
+  },
+  background: {
+    backgroundColor: '#fff',
   },
 });
 
