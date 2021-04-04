@@ -11,15 +11,6 @@ import SnapCarousel, {
 } from 'react-native-snap-carousel';
 import {connect, ConnectedProps} from 'react-redux';
 
-const imageUrls: string[] = [
-  'https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/1.jpg',
-  'https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/2.jpg',
-  'https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/3.jpg',
-  'https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/4.jpg',
-  'https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/5.jpg',
-  'https://cutepandastorageaccount.blob.core.windows.net/purelistenapp/carousel/6.jpg',
-];
-
 const sliderWidth = viewPortWidth;
 const sideWidth = wp(90);
 export const sideHeight = hp(26);

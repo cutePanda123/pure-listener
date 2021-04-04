@@ -83,7 +83,7 @@ const homeModel: HomeModel = {
     },
   },
   effects: {
-    *fetchCarouselImages(_, {call, put}) {
+    *fetchCarouselImages(action, {call, put}) {
       const {data, state, msg} = yield call(axios.get, CAROUSEL_DATA_ENDPOINT);
       console.log('carousel images data: ', data);
       yield put({
@@ -92,6 +92,9 @@ const homeModel: HomeModel = {
           carouselImages: data,
         },
       });
+      if (typeof action.callback === 'function') {
+        action.callback();
+      }
     },
     *fetchGuessImages(_, {call, put}) {
       const {data, state, msg} = yield call(

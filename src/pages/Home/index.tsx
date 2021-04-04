@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ScrollView,
   Text,
   FlatList,
   View,
@@ -15,7 +14,7 @@ import {RootState} from '@/models/index';
 import Carousel, {sideHeight} from './Carousel';
 import GuessYouLike from './GuessYouLike';
 import ChannelItem from './ChannelItem';
-import homeModel, {IChannel} from '@/models/home';
+import {IChannel} from '@/models/home';
 
 const mapStateToProps = (state: RootState) => ({
   carouselImages: state.home.carouselImages,
@@ -46,7 +45,7 @@ class Home extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const {carouselImages, loading, channels} = this.props;
+    const {channels} = this.props;
     const {refreshing} = this.state;
     return (
       <FlatList
@@ -101,7 +100,10 @@ class Home extends React.Component<IProps, IState> {
 
     const {dispatch} = this.props;
     dispatch({
-      type: 'home/fetchChannelData',
+      type: 'home/fetchGuessImages',
+    });
+    dispatch({
+      type: 'home/fetchCarouselImages',
       callback: () => {
         this.setState({
           refreshing: false,
@@ -141,7 +143,7 @@ class Home extends React.Component<IProps, IState> {
   }
 
   get renderHeader() {
-    const {carouselImages, loading} = this.props;
+    const {loading} = this.props;
     return (
       <View>
         {loading ? <Text>Loading....</Text> : null}
