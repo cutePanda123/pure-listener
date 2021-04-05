@@ -59,7 +59,9 @@ class TopTabBarWrapper extends React.Component<IProps> {
             indicatorStyle={updatedIndicatorStyle}
             style={styles.tabBar}
           />
-          <Touchable style={styles.topTabBarCategory}>
+          <Touchable
+            style={styles.topTabBarCategory}
+            onPress={this.navigateToCategory}>
             <Text style={textStyle}>Category</Text>
           </Touchable>
         </View>
@@ -74,6 +76,11 @@ class TopTabBarWrapper extends React.Component<IProps> {
       </View>
     );
   }
+
+  navigateToCategory = () => {
+    const {navigation} = this.props;
+    navigation.navigate('Category');
+  };
 }
 
 const styles = StyleSheet.create({

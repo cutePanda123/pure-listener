@@ -8,12 +8,14 @@ import {
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import Detail from '../pages/Detail';
-import { Platform, StatusBar, StyleSheet } from 'react-native';
+import {Platform, StatusBar, StyleSheet} from 'react-native';
+import Category from '../pages/Category';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
+  Category: undefined;
   Detail: {
     id: number;
   };
@@ -40,9 +42,9 @@ class Navigator extends React.Component {
                 android: {
                   elevation: 0,
                   borderBottomWidth: StyleSheet.hairlineWidth,
-                }
-              })
-            }
+                },
+              }),
+            },
           }}>
           <Stack.Screen
             options={{
@@ -50,6 +52,13 @@ class Navigator extends React.Component {
             }}
             name="BottomTabs"
             component={BottomTabs}
+          />
+          <Stack.Screen
+            options={{
+              headerTitle: 'Category',
+            }}
+            name="Category"
+            component={Category}
           />
           <Stack.Screen
             options={{
