@@ -8,7 +8,7 @@ const CATEGORY_DATA_URL = '/mock/29/category';
 export interface ICategory {
   id: string;
   name: string;
-  classify?: string;
+  category?: string;
 }
 
 export interface CategoryModelState {
