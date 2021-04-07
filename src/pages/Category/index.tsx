@@ -6,6 +6,8 @@ import {ICategory} from '@/models/category';
 import _ from 'lodash';
 import {ScrollView} from 'react-native-gesture-handler';
 import CategoryItem from './CategoryItem';
+import {RootStackNavigation} from '@/navigator/index';
+import HeaderRightBtn from './HeaderRightBtn';
 
 const mapStateToProps = ({category}: RootState) => {
   return {
@@ -17,7 +19,9 @@ const mapStateToProps = ({category}: RootState) => {
 const connector = connect(mapStateToProps);
 
 type ModelState = ConnectedProps<typeof connector>;
-interface IProps extends ModelState {}
+interface IProps extends ModelState {
+  navigation: RootStackNavigation;
+}
 interface IState {
   selectedCategories: ICategory[];
 }
@@ -28,7 +32,20 @@ class Category extends React.Component<IProps, IState> {
     this.state = {
       selectedCategories: props.selectedCategories,
     };
+    props.navigation.setOptions({
+      headerRight: () => {
+        return <HeaderRightBtn onEditModeChange={this.onEditModeChange} />;
+      },
+    });
   }
+
+  onEditModeChange = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'category/toggleEditMode',
+    });
+  };
+
   render() {
     const {candidateCategories} = this.props;
     const {selectedCategories} = this.state;
@@ -36,7 +53,7 @@ class Category extends React.Component<IProps, IState> {
       candidateCategories,
       (category) => category.category,
     );
-    console.log('category group: ', categoryGroup)
+    console.log('category group: ', categoryGroup);
 
     return (
       <ScrollView style={styles.container}>
