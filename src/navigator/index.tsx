@@ -36,7 +36,13 @@ class Navigator extends React.Component {
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             gestureEnabled: true,
             gestureDirection: 'horizontal',
-            headerStatusBarHeight: StatusBar.currentHeight,
+            ...Platform.select({
+              android: {
+                headerStatusBarHeight: StatusBar.currentHeight,
+              },
+            }),
+            headerBackTitleVisible: false,
+            headerTintColor: '#333',
             headerStyle: {
               ...Platform.select({
                 android: {
