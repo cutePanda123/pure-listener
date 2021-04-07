@@ -36,6 +36,7 @@ class Category extends React.Component<IProps, IState> {
       candidateCategories,
       (category) => category.category,
     );
+    console.log('category group: ', categoryGroup)
 
     return (
       <ScrollView style={styles.container}>
@@ -44,12 +45,12 @@ class Category extends React.Component<IProps, IState> {
           {selectedCategories.map(this.renderCategoryItem)}
         </View>
         <Text style={styles.title}>All categories</Text>
-        <View style={styles.items}>
+        <View>
           {Object.keys(categoryGroup).map((category) => {
             return (
               <View key={category}>
                 <Text style={styles.title}>{category}</Text>
-                <View>
+                <View style={styles.items}>
                   {categoryGroup[category].map(this.renderCategoryItem)}
                 </View>
               </View>
