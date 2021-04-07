@@ -48,7 +48,7 @@ const categoryModel: CategoryModel = {
   effects: {
     *loadData(_, {call, put}) {
       const selectedCategories = yield call(load, {key: 'selectedCategories'});
-      const candidateCategories = yield call(load, {key: 'selectedCategories'});
+      const candidateCategories = yield call(load, {key: 'candidateCategories'});
       if (selectedCategories) {
         yield put({
           type: 'setState',
