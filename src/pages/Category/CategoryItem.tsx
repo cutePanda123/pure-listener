@@ -5,6 +5,8 @@ import {StyleSheet, Text, View} from 'react-native';
 
 interface IProps {
   data: ICategory;
+  isEditMode: boolean;
+  isSelected: boolean;
 }
 
 const containerDivWidth = viewPortWidth - 10;
@@ -12,11 +14,18 @@ const categoryItemWidth = containerDivWidth / 4;
 
 class CategoryItem extends React.Component<IProps> {
   render() {
-    const {data} = this.props;
+    const {data, isEditMode, isSelected} = this.props;
     return (
       <View key={data.id} style={styles.itemWrapper}>
         <View style={styles.item}>
           <Text>{data.name}</Text>
+          {
+            isEditMode && (
+              <View style={styles.addOrDeleteIcon}>
+                <Text style={styles.iconText}>{isSelected ? '-' : '+'}</Text>
+              </View>
+            )
+          }
         </View>
       </View>
     );
@@ -39,4 +48,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     margin: 5,
   },
+  addOrDeleteIcon: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    height: 16,
+    width: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f86442',
+    borderRadius: 8,
+  },
+  iconText: {
+    color: '#fff',
+    lineHeight: 16,
+  }
 });
