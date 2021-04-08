@@ -7,6 +7,7 @@ interface IProps {
   data: ICategory;
   isEditMode: boolean;
   isSelected: boolean;
+  isPinned: boolean;
 }
 
 const containerDivWidth = viewPortWidth - 10;
@@ -14,18 +15,16 @@ const categoryItemWidth = containerDivWidth / 4;
 
 class CategoryItem extends React.Component<IProps> {
   render() {
-    const {data, isEditMode, isSelected} = this.props;
+    const {data, isEditMode, isSelected, isPinned} = this.props;
     return (
       <View key={data.id} style={styles.itemWrapper}>
-        <View style={styles.item}>
+        <View style={[styles.item, isEditMode && isPinned && styles.pinnedItem]}>
           <Text>{data.name}</Text>
-          {
-            isEditMode && (
-              <View style={styles.addOrDeleteIcon}>
-                <Text style={styles.iconText}>{isSelected ? '-' : '+'}</Text>
-              </View>
-            )
-          }
+          {isEditMode && !isPinned && (
+            <View style={styles.addOrDeleteIcon}>
+              <Text style={styles.iconText}>{isSelected ? '-' : '+'}</Text>
+            </View>
+          )}
         </View>
       </View>
     );
@@ -62,5 +61,8 @@ const styles = StyleSheet.create({
   iconText: {
     color: '#fff',
     lineHeight: 16,
-  }
+  },
+  pinnedItem: {
+    backgroundColor: '#ccc',
+  },
 });

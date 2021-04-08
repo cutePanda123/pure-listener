@@ -56,8 +56,15 @@ const categoryModel: CategoryModel = {
         type: 'setState',
         payload: {
           isEditMode: !category.isEditMode,
+          selectedCategories: payload.selectedCategories,
         },
       });
+      if (category.isEditMode) {
+        storage.save({
+          key: 'selectedCategories',
+          data: payload.selectedCategories,
+        });
+      }
     },
     *loadData(_, {call, put}) {
       const selectedCategories = yield call(load, {key: 'selectedCategories'});

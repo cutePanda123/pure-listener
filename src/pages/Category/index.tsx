@@ -28,6 +28,8 @@ interface IState {
   selectedCategories: ICategory[];
 }
 
+const pinnedCategory: number[] = [0, 1];
+
 class Category extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
@@ -43,8 +45,12 @@ class Category extends React.Component<IProps, IState> {
 
   onEditModeChange = () => {
     const {dispatch} = this.props;
+    const {selectedCategories} = this.state;
     dispatch({
       type: 'category/toggleEditMode',
+      payload: {
+        selectedCategories,
+      },
     });
   };
 
@@ -70,9 +76,20 @@ class Category extends React.Component<IProps, IState> {
               <View key={category}>
                 <Text style={styles.title}>{category}</Text>
                 <View style={styles.items}>
-                  {categoryGroup[category].map(
-                    this.renderUnselectedCategoryItem,
-                  )}
+                  {categoryGroup[category].map((candidateCategory, index) => {
+                    if (
+                      selectedCategories.find(
+                        (selectedCategory) =>
+                          candidateCategory.id === selectedCategory.id,
+                      )
+                    ) {
+                      return null;
+                    }
+                    return this.renderUnselectedCategoryItem(
+                      candidateCategory,
+                      index,
+                    );
+                  })}
                 </View>
               </View>
             );
@@ -84,38 +101,62 @@ class Category extends React.Component<IProps, IState> {
 
   renderSelectedCategoryItem = (category: ICategory, idx: number) => {
     const {isEditMode} = this.props;
+    const isPinned = pinnedCategory.indexOf(idx) >= 0;
     return (
-      <CategoryItem
+      <Touchable
         key={category.id}
-        data={category}
-        isEditMode={isEditMode}
-        isSelected={true}
-      />
+        onPress={() => this.onPressCategoryItem(category, idx, true)}
+        onLongPress={this.onLongPressCategoryItem}>
+        <CategoryItem
+          key={category.id}
+          data={category}
+          isEditMode={isEditMode}
+          isPinned={isPinned}
+          isSelected={true}
+        />
+      </Touchable>
     );
   };
 
-  onPressUnselectedCategoryItem = (category: ICategory, idx: number) => {
+  onPressCategoryItem = (
+    category: ICategory,
+    idx: number,
+    isSelectedItem: boolean,
+  ) => {
     const {isEditMode} = this.props;
     if (!isEditMode) {
       return;
     }
+    if (pinnedCategory.indexOf(idx) >= 0) {
+      return;
+    }
     const {selectedCategories} = this.state;
-    this.setState({
-      selectedCategories: [...selectedCategories, category],
-    });
-  }
+    if (isSelectedItem) {
+      this.setState({
+        selectedCategories: selectedCategories.filter(
+          (selectedCategory) => selectedCategory.id !== category.id,
+        ),
+      });
+    } else {
+      this.setState({
+        selectedCategories: [...selectedCategories, category],
+      });
+    }
+  };
 
   renderUnselectedCategoryItem = (category: ICategory, idx: number) => {
     const {isEditMode} = this.props;
     return (
-      <Touchable key={category.id} 
-      onPress={() => this.onPressUnselectedCategoryItem(category, idx)}
-      onLongPress={this.onLongPressCategoryItem}>
+      <Touchable
+        key={category.id}
+        onPress={() => this.onPressCategoryItem(category, idx, false)}
+        onLongPress={this.onLongPressCategoryItem}>
         <CategoryItem
           key={category.id}
           data={category}
           isEditMode={isEditMode}
           isSelected={false}
+          isPinned={false}
         />
       </Touchable>
     );
@@ -129,7 +170,7 @@ class Category extends React.Component<IProps, IState> {
         isEditMode: true,
       },
     });
-  }
+  };
 
   componentWillUnmount = () => {
     const {dispatch} = this.props;
@@ -139,7 +180,7 @@ class Category extends React.Component<IProps, IState> {
         isEditMode: false,
       },
     });
-  }
+  };
 }
 
 const styles = StyleSheet.create({
