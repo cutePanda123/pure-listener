@@ -10,8 +10,10 @@ interface IProps {
   isPinned: boolean;
 }
 
-const containerDivWidth = viewPortWidth - 10;
-const categoryItemWidth = containerDivWidth / 4;
+export const containerDivWidth = viewPortWidth - 10;
+export const categoryItemWidth = containerDivWidth / 4;
+export const itemHeight = 48;
+export const itemMargin = 5;
 
 class CategoryItem extends React.Component<IProps> {
   render() {
@@ -36,7 +38,7 @@ export default CategoryItem;
 const styles = StyleSheet.create({
   itemWrapper: {
     width: categoryItemWidth,
-    height: 48,
+    height: itemHeight,
   },
   item: {
     backgroundColor: '#fff',
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     padding: 5,
     flex: 1,
     borderRadius: 4,
-    margin: 5,
+    margin: itemMargin,
   },
   addOrDeleteIcon: {
     position: 'absolute',

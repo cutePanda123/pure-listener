@@ -5,10 +5,16 @@ import {connect, ConnectedProps} from 'react-redux';
 import {ICategory} from '@/models/category';
 import _ from 'lodash';
 import {ScrollView} from 'react-native-gesture-handler';
-import CategoryItem from './CategoryItem';
+import CategoryItem, {
+  categoryItemWidth,
+  containerDivWidth,
+  itemHeight,
+  itemMargin,
+} from './CategoryItem';
 import {RootStackNavigation} from '@/navigator/index';
 import HeaderRightBtn from './HeaderRightBtn';
 import Touchable from '@/components/Touchable';
+import {DragSortableView} from 'react-native-drag-sort';
 
 const mapStateToProps = ({category}: RootState) => {
   return {
@@ -43,8 +49,14 @@ class Category extends React.Component<IProps, IState> {
     });
   }
 
+  onCategoryItemDrag = (data: ICategory[]) => {
+    this.setState({
+      selectedCategories: data,
+    });
+  };
+
   onEditModeChange = () => {
-    const {dispatch} = this.props;
+    const {dispatch, isEditMode, navigation} = this.props;
     const {selectedCategories} = this.state;
     dispatch({
       type: 'category/toggleEditMode',
@@ -52,10 +64,13 @@ class Category extends React.Component<IProps, IState> {
         selectedCategories,
       },
     });
+    if (isEditMode) {
+      navigation.goBack();
+    }
   };
 
   render() {
-    const {candidateCategories} = this.props;
+    const {candidateCategories, isEditMode} = this.props;
     const {selectedCategories} = this.state;
     const categoryGroup = _.groupBy(
       candidateCategories,
@@ -67,7 +82,19 @@ class Category extends React.Component<IProps, IState> {
       <ScrollView style={styles.container}>
         <Text style={styles.title}>My categories</Text>
         <View style={styles.items}>
-          {selectedCategories.map(this.renderSelectedCategoryItem)}
+          <DragSortableView
+            dataSource={selectedCategories}
+            renderItem={this.renderSelectedCategoryItem}
+            sortable={isEditMode}
+            keyExtractor={(item) => item.id}
+            onDataChange={this.onCategoryItemDrag}
+            parentWidth={containerDivWidth}
+            childrenWidth={categoryItemWidth}
+            childrenHeight={itemHeight}
+            marginChildrenTop={itemMargin}
+            fixedItems={pinnedCategory}
+            onClickItem={(data, item) => this.onPressSelectedCategory(data, item)}
+          />
         </View>
         <Text style={styles.title}>All categories</Text>
         <View>
@@ -103,18 +130,13 @@ class Category extends React.Component<IProps, IState> {
     const {isEditMode} = this.props;
     const isPinned = pinnedCategory.indexOf(idx) >= 0;
     return (
-      <Touchable
+      <CategoryItem
         key={category.id}
-        onPress={() => this.onPressCategoryItem(category, idx, true)}
-        onLongPress={this.onLongPressCategoryItem}>
-        <CategoryItem
-          key={category.id}
-          data={category}
-          isEditMode={isEditMode}
-          isPinned={isPinned}
-          isSelected={true}
-        />
-      </Touchable>
+        data={category}
+        isEditMode={isEditMode}
+        isPinned={isPinned}
+        isSelected={true}
+      />
     );
   };
 
@@ -161,6 +183,10 @@ class Category extends React.Component<IProps, IState> {
       </Touchable>
     );
   };
+
+  onPressSelectedCategory = (data: ICategory[], item: ICategory) => {
+    this.onPressCategoryItem(item, data.indexOf(item), true);
+  }
 
   onLongPressCategoryItem = () => {
     const {dispatch} = this.props;
