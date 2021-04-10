@@ -1,20 +1,49 @@
 import React from 'react';
 import {
   createMaterialTopTabNavigator,
-  MaterialTopTabBar,
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
 import Home from '@/pages/Home';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import TopTabBarWrapper from '@/pages/Views/TopTabBarWrapper';
+import {RootState} from '../models';
+import {connect, ConnectedProps} from 'react-redux';
+import {ICategory} from '@/models/category';
 
 const Tab = createMaterialTopTabNavigator();
 
-class HomeTabs extends React.Component {
+const mapStateToProps = ({category}: RootState) => {
+  return {
+    selectedCategories: category.selectedCategories,
+  };
+};
+
+const connector = connect(mapStateToProps);
+
+type ModelState = ConnectedProps<typeof connector>;
+
+interface IProps extends ModelState {}
+
+class HomeTabs extends React.Component<IProps> {
   renderTabBar = (props: MaterialTopTabBarProps) => {
     return <TopTabBarWrapper {...props} />;
   };
+
+  renderHeaderTabs = (item: ICategory) => {
+    return (
+      <Tab.Screen
+        key={item.id}
+        name={item.id}
+        component={Home}
+        options={{
+          tabBarLabel: item.name,
+        }}
+      />
+    );
+  };
+
   render() {
+    const {selectedCategories} = this.props;
     return (
       <Tab.Navigator
         lazy={true}
@@ -35,22 +64,16 @@ class HomeTabs extends React.Component {
           activeTintColor: '#f86442',
           inactiveTintColor: '#333',
         }}>
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarLabel: 'Recommendation',
-          }}
-        />
+        {selectedCategories.map(this.renderHeaderTabs)}
       </Tab.Navigator>
     );
   }
 }
 
 const styles = StyleSheet.create({
-    sceneContainer: {
-        backgroundColor: 'transparent',
-    },
+  sceneContainer: {
+    backgroundColor: 'transparent',
+  },
 });
 
-export default HomeTabs;
+export default connector(HomeTabs);

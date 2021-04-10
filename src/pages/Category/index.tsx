@@ -1,20 +1,20 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {RootState} from '@/models/index';
-import {connect, ConnectedProps} from 'react-redux';
-import {ICategory} from '@/models/category';
+import { View, Text, StyleSheet } from 'react-native';
+import { RootState } from '@/models/index';
+import { connect, ConnectedProps } from 'react-redux';
+import { ICategory } from '@/models/category';
 import _ from 'lodash';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import CategoryItem, {
   categoryItemWidth,
   containerDivWidth,
   itemHeight,
   itemMargin,
 } from './CategoryItem';
-import {RootStackNavigation} from '@/navigator/index';
+import { RootStackNavigation } from '@/navigator/index';
 import HeaderRightBtn from './HeaderRightBtn';
 import Touchable from '@/components/Touchable';
-import {DragSortableView} from 'react-native-drag-sort';
+import { DragSortableView } from 'react-native-drag-sort';
 
 const mapStateToProps = ({category}: RootState) => {
   return {
