@@ -101,7 +101,7 @@ const homeModel: HomeModel = {
         axios.get,
         GUESS_YOU_LIKE_DATA_ENDPOINT,
       );
-      console.log('guess images data: ', data);
+      console.log('guess images data: !!!!!!!!!!!!!!!!', data);
       yield put({
         type: 'setState',
         payload: {

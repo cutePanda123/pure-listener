@@ -1,5 +1,5 @@
 import Touchable from '@/components/Touchable';
-import {RootState} from '@/models/';
+import {RootState} from '@/models/index';
 import {
   MaterialTopTabBar,
   MaterialTopTabBarProps,
@@ -7,18 +7,20 @@ import {
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
-import LinearGradient from 'react-native-linear-gradient';
 import LinearAnimatedGradientTransition from 'react-native-linear-animated-gradient-transition';
 import {connect, ConnectedProps} from 'react-redux';
+import {getActiveRouteName} from '@/utils/index';
 
-const mapStateToProps = ({home}: RootState) => {
+const mapStateToProps = (state: RootState, props: MaterialTopTabBarProps) => {
+  const routeName = getActiveRouteName(props.state);
+  const modelState = state[routeName];
   return {
     linearColors:
-      home.carouselImages &&
-      home.carouselImages.length > home.activeCarouselIndex
-        ? home.carouselImages[home.activeCarouselIndex].colors
+      modelState.carouselImages &&
+      modelState.carouselImages.length > modelState.activeCarouselIndex
+        ? modelState.carouselImages[modelState.activeCarouselIndex].colors
         : undefined,
-    isGradientVisible: home.isGradientVisible,
+    isGradientVisible: modelState.isGradientVisible,
   };
 };
 

@@ -15,14 +15,29 @@ import Carousel, {sideHeight} from './Carousel';
 import GuessYouLike from './GuessYouLike';
 import ChannelItem from './ChannelItem';
 import {IChannel} from '@/models/home';
+import {RouteProp} from '@react-navigation/core';
+import {HomeParamList} from '@/navigator/HomeTabs';
 
-const mapStateToProps = (state: RootState) => ({
-  carouselImages: state.home.carouselImages,
-  loading: state.loading.effects['home/fetchChannelData'],
-  channels: state.home.channels,
-  hasMore: state.home.pagination.hasMore,
-  isGradientVisible: state.home.isGradientVisible,
-});
+const mapStateToProps = (
+  state: RootState,
+  props: {route: RouteProp<HomeParamList, string>},
+) => {
+  const {namespace} = props.route.params;
+  const modelState = state[namespace];
+
+  console.log("!!!!!!!! model state: ", modelState);
+    
+    //console.log("!!!!!!! loading data: ", )
+
+  return {
+    namespace,
+    carouselImages: modelState.carouselImages,
+    loading: state.loading.effects[`${namespace}/fetchChannelData`],
+    channels: modelState.channels,
+    hasMore: modelState.pagination.hasMore,
+    isGradientVisible: modelState.isGradientVisible,
+  };
+};
 
 const connector = connect(mapStateToProps);
 
@@ -45,7 +60,8 @@ class Home extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const {channels} = this.props;
+    const {channels, namespace} = this.props;
+    console.log("!!!!!!!! channel:" + namespace + ",   ", channels);
     const {refreshing} = this.state;
     return (
       <FlatList
@@ -69,10 +85,10 @@ class Home extends React.Component<IProps, IState> {
   }: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = nativeEvent.contentOffset.y;
     const newIsGradientVisible = offsetY < sideHeight;
-    const {dispatch, isGradientVisible} = this.props;
+    const {dispatch, isGradientVisible, namespace} = this.props;
     if (isGradientVisible !== newIsGradientVisible) {
       dispatch({
-        type: 'home/setState',
+        type: `${namespace}/setState`,
         payload: {
           isGradientVisible: newIsGradientVisible,
         },
@@ -81,12 +97,12 @@ class Home extends React.Component<IProps, IState> {
   };
 
   onEndReached = () => {
-    const {dispatch, loading, hasMore} = this.props;
+    const {dispatch, loading, hasMore, namespace} = this.props;
     if (loading || !hasMore) {
       return;
     }
     dispatch({
-      type: 'home/fetchChannelData',
+      type: `${namespace}/fetchChannelData`,
       payload: {
         loadMore: true,
       },
@@ -98,12 +114,12 @@ class Home extends React.Component<IProps, IState> {
       refreshing: true,
     });
 
-    const {dispatch} = this.props;
+    const {dispatch, namespace} = this.props;
     dispatch({
-      type: 'home/fetchGuessImages',
+      type: `${namespace}/fetchGuessImages`,
     });
     dispatch({
-      type: 'home/fetchCarouselImages',
+      type: `${namespace}/fetchCarouselImages`,
       callback: () => {
         this.setState({
           refreshing: false,
@@ -143,13 +159,15 @@ class Home extends React.Component<IProps, IState> {
   }
 
   get renderHeader() {
-    const {loading} = this.props;
+    const {loading, namespace} = this.props;
     return (
       <View>
         {loading ? <Text>Loading....</Text> : null}
         <Carousel />
         <View style={styles.background}>
-          <GuessYouLike />
+          <GuessYouLike
+            namespace={namespace}
+          />
         </View>
       </View>
     );

@@ -1,6 +1,8 @@
-import { create } from 'dva-core-ts';
+import { create, Model } from 'dva-core-ts';
 import models from '@/models/index';
 import creatLoading from 'dva-loading-ts';
+import modelExtend from 'dva-model-extend';
+import homeModel from '@/models/home';
 
 // 1. create a dva instance
 const app = create();
@@ -18,3 +20,25 @@ app.start();
 
 // 4. export dva
 export default app._store;
+
+interface ModelCache {
+    [key: string]: boolean;
+}
+
+const modelCache: ModelCache = {
+    home: true,
+};
+
+function registerModel(model: Model) {
+    if (!modelCache[model.namespace]) {
+        console.log("!!!!!!!!!output model: ", model);
+
+        app.model(model);
+        modelCache[model.namespace] = true;
+    }
+}
+
+export function createHomeModel(namespace: string) {
+    const model = modelExtend(homeModel, {namespace});
+    registerModel(model);
+};
