@@ -32,6 +32,7 @@ interface IProps extends ModelState {
 }
 interface IState {
   selectedCategories: ICategory[];
+  scrollEnabled: boolean;
 }
 
 const pinnedCategory: number[] = [0, 1];
@@ -41,6 +42,7 @@ class Category extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       selectedCategories: props.selectedCategories,
+      scrollEnabled: true,
     };
     props.navigation.setOptions({
       headerRight: () => {
@@ -71,7 +73,7 @@ class Category extends React.Component<IProps, IState> {
 
   render() {
     const {candidateCategories, isEditMode} = this.props;
-    const {selectedCategories} = this.state;
+    const {selectedCategories, scrollEnabled} = this.state;
     const categoryGroup = _.groupBy(
       candidateCategories,
       (category) => category.category,
@@ -79,7 +81,7 @@ class Category extends React.Component<IProps, IState> {
     console.log('category group: ', categoryGroup);
 
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} scrollEnabled={scrollEnabled}>
         <Text style={styles.title}>My categories</Text>
         <View style={styles.items}>
           <DragSortableView
@@ -88,6 +90,8 @@ class Category extends React.Component<IProps, IState> {
             sortable={isEditMode}
             keyExtractor={(item) => item.id}
             onDataChange={this.onCategoryItemDrag}
+            onDragStart={() => this.setState({scrollEnabled: false})}
+            onDragEnd={() => this.setState({scrollEnabled: true})}
             parentWidth={containerDivWidth}
             childrenWidth={categoryItemWidth}
             childrenHeight={itemHeight}
