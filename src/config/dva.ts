@@ -31,8 +31,6 @@ const modelCache: ModelCache = {
 
 function registerModel(model: Model) {
     if (!modelCache[model.namespace]) {
-        console.log("!!!!!!!!!output model: ", model);
-
         app.model(model);
         modelCache[model.namespace] = true;
     }
@@ -40,5 +38,8 @@ function registerModel(model: Model) {
 
 export function createHomeModel(namespace: string) {
     const model = modelExtend(homeModel, {namespace});
+
+    console.log('model create : ', model);
+
     registerModel(model);
 };

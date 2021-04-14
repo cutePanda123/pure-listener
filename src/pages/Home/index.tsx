@@ -23,11 +23,9 @@ const mapStateToProps = (
   props: {route: RouteProp<HomeParamList, string>},
 ) => {
   const {namespace} = props.route.params;
-  const modelState = state[namespace];
 
-  console.log("!!!!!!!! model state: ", modelState);
-    
-    //console.log("!!!!!!! loading data: ", )
+  console.log("namespace: ", namespace)
+  const modelState = state[namespace];
 
   return {
     namespace,
@@ -61,7 +59,6 @@ class Home extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const {channels, namespace} = this.props;
-    console.log("!!!!!!!! channel:" + namespace + ",   ", channels);
     const {refreshing} = this.state;
     return (
       <FlatList
@@ -86,6 +83,8 @@ class Home extends React.Component<IProps, IState> {
     const offsetY = nativeEvent.contentOffset.y;
     const newIsGradientVisible = offsetY < sideHeight;
     const {dispatch, isGradientVisible, namespace} = this.props;
+    console.log('grandient:', isGradientVisible);
+    console.log('namespace:', namespace);
     if (isGradientVisible !== newIsGradientVisible) {
       dispatch({
         type: `${namespace}/setState`,
@@ -101,6 +100,7 @@ class Home extends React.Component<IProps, IState> {
     if (loading || !hasMore) {
       return;
     }
+    console.log('on end reached namespace: ', namespace);
     dispatch({
       type: `${namespace}/fetchChannelData`,
       payload: {

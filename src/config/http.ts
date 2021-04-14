@@ -6,7 +6,6 @@ axios.defaults.baseURL = Config.API_URL; //'http://192.168.29.111:3002'; //Confi
 
 // request interceptor
 axios.interceptors.request.use((request) => {
-    console.log('request intercepter', request);
     /*
     in prod, we get token from localstorage and add it to the request header
     request.headers = {
@@ -21,7 +20,6 @@ axios.interceptors.request.use((request) => {
 
 // response interceptor
 axios.interceptors.response.use((response) => {
-    console.log('response interceptor', response);
     return response.data;
 }, (error) => {
     return Promise.reject(error);

@@ -85,7 +85,7 @@ const homeModel: HomeModel = {
   effects: {
     *fetchCarouselImages(action, {call, put}) {
       const {data, state, msg} = yield call(axios.get, CAROUSEL_DATA_ENDPOINT);
-      console.log('carousel images data: ', data);
+
       yield put({
         type: 'setState',
         payload: {
@@ -101,7 +101,7 @@ const homeModel: HomeModel = {
         axios.get,
         GUESS_YOU_LIKE_DATA_ENDPOINT,
       );
-      console.log('guess images data: !!!!!!!!!!!!!!!!', data);
+      
       yield put({
         type: 'setState',
         payload: {
@@ -122,7 +122,7 @@ const homeModel: HomeModel = {
           pageNum: pageIdx,
         },
       });
-      console.log('channel data: ', data);
+      //console.log('channel data: ', data);
       let newChannels = data.results;
       if (action.payload && action.payload.loadMore) {
         newChannels = channels.concat(newChannels);

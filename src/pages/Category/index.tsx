@@ -78,7 +78,6 @@ class Category extends React.Component<IProps, IState> {
       candidateCategories,
       (category) => category.category,
     );
-    console.log('category group: ', categoryGroup);
 
     return (
       <ScrollView style={styles.container} scrollEnabled={scrollEnabled}>
