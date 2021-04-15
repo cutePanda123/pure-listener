@@ -1,4 +1,3 @@
-import {resolvePlugin} from '@babel/core';
 import {Effect, Model} from 'dva-core-ts';
 import {Reducer} from 'redux';
 import axios from 'axios';

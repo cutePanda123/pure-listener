@@ -23,8 +23,6 @@ const mapStateToProps = (
   props: {route: RouteProp<HomeParamList, string>},
 ) => {
   const {namespace} = props.route.params;
-
-  console.log("namespace: ", namespace)
   const modelState = state[namespace];
 
   return {
