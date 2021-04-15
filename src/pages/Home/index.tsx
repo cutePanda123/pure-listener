@@ -8,21 +8,21 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import {RootStackNavigation} from '../../navigator';
-import {connect, ConnectedProps} from 'react-redux';
-import {RootState} from '@/models/index';
-import Carousel, {sideHeight} from './Carousel';
+import { RootStackNavigation } from '../../navigator';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '@/models/index';
+import Carousel, { sideHeight } from './Carousel';
 import GuessYouLike from './GuessYouLike';
 import ChannelItem from './ChannelItem';
-import {IChannel} from '@/models/home';
-import {RouteProp} from '@react-navigation/core';
-import {HomeParamList} from '@/navigator/HomeTabs';
+import { IChannel } from '@/models/home';
+import { RouteProp } from '@react-navigation/core';
+import { HomeParamList } from '@/navigator/HomeTabs';
 
 const mapStateToProps = (
   state: RootState,
-  props: {route: RouteProp<HomeParamList, string>},
+  props: { route: RouteProp<HomeParamList, string> },
 ) => {
-  const {namespace} = props.route.params;
+  const { namespace } = props.route.params;
   const modelState = state[namespace];
 
   return {
@@ -56,8 +56,8 @@ class Home extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const {channels, namespace} = this.props;
-    const {refreshing} = this.state;
+    const { channels } = this.props;
+    const { refreshing } = this.state;
     return (
       <FlatList
         data={channels}
@@ -80,9 +80,8 @@ class Home extends React.Component<IProps, IState> {
   }: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = nativeEvent.contentOffset.y;
     const newIsGradientVisible = offsetY < sideHeight;
-    const {dispatch, isGradientVisible, namespace} = this.props;
-    console.log('grandient:', isGradientVisible);
-    console.log('namespace:', namespace);
+    const { dispatch, isGradientVisible, namespace } = this.props;
+
     if (isGradientVisible !== newIsGradientVisible) {
       dispatch({
         type: `${namespace}/setState`,
@@ -94,11 +93,11 @@ class Home extends React.Component<IProps, IState> {
   };
 
   onEndReached = () => {
-    const {dispatch, loading, hasMore, namespace} = this.props;
+    const { dispatch, loading, hasMore, namespace } = this.props;
     if (loading || !hasMore) {
       return;
     }
-    console.log('on end reached namespace: ', namespace);
+
     dispatch({
       type: `${namespace}/fetchChannelData`,
       payload: {
@@ -112,7 +111,7 @@ class Home extends React.Component<IProps, IState> {
       refreshing: true,
     });
 
-    const {dispatch, namespace} = this.props;
+    const { dispatch, namespace } = this.props;
     dispatch({
       type: `${namespace}/fetchGuessImages`,
     });
@@ -127,7 +126,7 @@ class Home extends React.Component<IProps, IState> {
   };
 
   get renderFooter() {
-    const {loading, hasMore, channels} = this.props;
+    const { loading, hasMore, channels } = this.props;
     if (!hasMore) {
       return (
         <View style={styles.footer}>
@@ -145,7 +144,7 @@ class Home extends React.Component<IProps, IState> {
   }
 
   get renderEmpty() {
-    const {loading} = this.props;
+    const { loading } = this.props;
     if (loading) {
       return null;
     }
@@ -157,7 +156,7 @@ class Home extends React.Component<IProps, IState> {
   }
 
   get renderHeader() {
-    const {loading, namespace} = this.props;
+    const { loading, namespace } = this.props;
     return (
       <View>
         {loading ? <Text>Loading....</Text> : null}
@@ -175,17 +174,18 @@ class Home extends React.Component<IProps, IState> {
     return item.id;
   };
 
-  renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
+  renderItem = ({ item }: ListRenderItemInfo<IChannel>) => {
     return <ChannelItem data={item} onPressHandler={this.onPress} />;
   };
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    const { dispatch, namespace } = this.props;
+    console.log('namespace from did mount: ', namespace);
     dispatch({
-      type: 'home/fetchCarouselImages',
+      type: `${namespace}/fetchCarouselImages`,
     });
     dispatch({
-      type: 'home/fetchChannelData',
+      type: `${namespace}/fetchChannelData`,
     });
   }
 

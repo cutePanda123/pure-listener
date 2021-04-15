@@ -1,4 +1,4 @@
-import { create, Model } from 'dva-core-ts';
+import {create, Model} from 'dva-core-ts';
 import models from '@/models/index';
 import creatLoading from 'dva-loading-ts';
 import modelExtend from 'dva-model-extend';
@@ -8,9 +8,9 @@ import homeModel from '@/models/home';
 const app = create();
 
 // 2. load model objects
-models.forEach(model => {
-    app.model(model);
-})
+models.forEach((model) => {
+  app.model(model);
+});
 
 // 3. add a plugin to dva
 app.use(creatLoading());
@@ -22,24 +22,21 @@ app.start();
 export default app._store;
 
 interface ModelCache {
-    [key: string]: boolean;
+  [key: string]: boolean;
 }
 
 const modelCache: ModelCache = {
-    home: true,
+  home: true,
 };
 
 function registerModel(model: Model) {
-    if (!modelCache[model.namespace]) {
-        app.model(model);
-        modelCache[model.namespace] = true;
-    }
+  if (!modelCache[model.namespace]) {
+    app.model(model);
+    modelCache[model.namespace] = true;
+  }
 }
 
 export function createHomeModel(namespace: string) {
-    const model = modelExtend(homeModel, {namespace});
-
-    console.log('model create : ', model);
-
-    registerModel(model);
-};
+  const model = modelExtend(homeModel, {namespace});
+  registerModel(model);
+}
