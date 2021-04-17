@@ -7,21 +7,52 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
-import Detail from '../pages/Detail';
+import ChannelDetail from '../pages/ChannelDetail';
 import {Platform, StatusBar, StyleSheet} from 'react-native';
 import Category from '../pages/Category';
+import {RouteProp} from '@react-navigation/core';
+import Animated from 'react-native-reanimated';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
   Category: undefined;
-  Detail: {
-    id: number;
+  ChannelDetail: {
+    item: {
+      id: string;
+      title: string;
+      imageURL: string;
+    }
   };
 };
 
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
+
+function getChannelDetailOptions(routeProp: {
+  route: RouteProp<RootStackParamList, 'ChannelDetail'>
+}) {
+  return {
+    headerTitle: routeProp.route.params.item.title,
+    headerTransparent: true,
+    headerTitleStyle: {
+      opacity: 0,
+    },
+    headerBackground: () => {
+      return (
+        <Animated.View style={styles.headerBackground} />
+      );
+    },
+  };
+};
+
+const styles = StyleSheet.create({
+  headerBackground: {
+    flex: 1,
+    backgroundColor: '#fff',
+    opacity: 0,
+  },
+});
 
 let Stack = createStackNavigator<RootStackParamList>();
 class Navigator extends React.Component {
@@ -67,11 +98,9 @@ class Navigator extends React.Component {
             component={Category}
           />
           <Stack.Screen
-            options={{
-              headerTitle: 'Detail',
-            }}
-            name="Detail"
-            component={Detail}
+            options={getChannelDetailOptions}
+            name="ChannelDetail"
+            component={ChannelDetail}
           />
         </Stack.Navigator>
       </NavigationContainer>

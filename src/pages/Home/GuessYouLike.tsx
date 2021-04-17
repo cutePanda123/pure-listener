@@ -18,6 +18,7 @@ type ModelState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModelState {
     namespace: string;
+    openChannelDetail: (item: IGuessYouLikeImage) => void;
 };
 
 class GuessYouLike extends React.PureComponent<IProps> {
@@ -34,11 +35,12 @@ class GuessYouLike extends React.PureComponent<IProps> {
     }
 
     renderItem = ({item}: {item: IGuessYouLikeImage}) => {
+        const {openChannelDetail} = this.props;
         return (
             <Touchable
                 style={styles.item}
                 onPress={() => {
-                    console.log('haha');
+                    openChannelDetail(item);
                 }}>
                 <Image source={{uri: item.imageURL}} style={styles.image} />
                 <Text numberOfLines={2}>{item.title}</Text>

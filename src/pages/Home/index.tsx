@@ -14,7 +14,7 @@ import { RootState } from '@/models/index';
 import Carousel, { sideHeight } from './Carousel';
 import GuessYouLike from './GuessYouLike';
 import ChannelItem from './ChannelItem';
-import { IChannel } from '@/models/home';
+import { IChannel, IGuessYouLikeImage } from '@/models/home';
 import { RouteProp } from '@react-navigation/core';
 import { HomeParamList } from '@/navigator/HomeTabs';
 
@@ -164,6 +164,7 @@ class Home extends React.Component<IProps, IState> {
         <View style={styles.background}>
           <GuessYouLike
             namespace={namespace}
+            openChannelDetail={this.openChannelDetail}
           />
         </View>
       </View>
@@ -175,7 +176,7 @@ class Home extends React.Component<IProps, IState> {
   };
 
   renderItem = ({ item }: ListRenderItemInfo<IChannel>) => {
-    return <ChannelItem data={item} onPressHandler={this.onPress} />;
+    return <ChannelItem data={item} onPressHandler={this.openChannelDetail} />;
   };
 
   componentDidMount() {
@@ -189,8 +190,9 @@ class Home extends React.Component<IProps, IState> {
     });
   }
 
-  onPress = (data: IChannel) => {
-    console.log('print data from onPress:', data);
+  openChannelDetail = (data: IChannel | IGuessYouLikeImage) => {
+    const {navigation} = this.props;
+    navigation.navigate("ChannelDetail", {item: data});
   };
 }
 
