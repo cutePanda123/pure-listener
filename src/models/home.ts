@@ -3,9 +3,9 @@ import {Reducer} from 'redux';
 import axios from 'axios';
 import {RootState} from '.';
 
-const CAROUSEL_DATA_ENDPOINT = '/mock/29/carousel';
-const GUESS_YOU_LIKE_DATA_ENDPOINT = '/mock/29/guess';
-const CHANNEL_DATA_ENDPOINT = '/mock/29/channel';
+const CAROUSEL_DATA_ENDPOINT = '/mock/11/carousel';
+const GUESS_YOU_LIKE_DATA_ENDPOINT = '/mock/11/guess';
+const CHANNEL_DATA_ENDPOINT = '/mock/11/channel';
 
 export interface ICarouselImage {
   id: string;

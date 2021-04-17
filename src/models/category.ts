@@ -4,7 +4,7 @@ import {Model, Effect, SubscriptionsMapObject} from 'dva-core-ts';
 import {Reducer} from 'redux';
 import {RootState} from '.';
 
-const CATEGORY_DATA_URL = '/mock/29/category';
+const CATEGORY_DATA_URL = '/mock/11/category';
 
 export interface ICategory {
   id: string;
