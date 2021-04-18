@@ -1,7 +1,6 @@
-import {RootState} from '@/models/';
+import {RootState} from '@/models/index';
 import {ICarouselImage} from '@/models/home';
-import {hp} from '@/utils/';
-import {viewPortWidth, wp} from '@/utils/';
+import {viewPortWidth, wp, hp} from '@/utils/index';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import SnapCarousel, {
