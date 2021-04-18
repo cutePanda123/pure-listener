@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, Alert} from 'react-native';
+import {View, Text, FlatList, Alert, StyleSheet} from 'react-native';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {ListRenderItemInfo} from 'react-native';
@@ -33,6 +33,7 @@ class MediaList extends React.Component<IProps> {
     const {list} = this.props;
     return (
       <FlatList
+        style={styles.container}
         data={list}
         renderItem={this.renderItem}
         keyExtractor={this.keyExtractor}
@@ -40,5 +41,11 @@ class MediaList extends React.Component<IProps> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+  },
+});
 
 export default connector(MediaList);
