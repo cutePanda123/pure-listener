@@ -1,53 +1,97 @@
+import {times} from 'lodash';
 import React from 'react';
-import {View, Text} from 'react-native';
-import { Route, SceneRendererProps, TabView } from 'react-native-tab-view';
+import {View, Text, StyleSheet, Platform} from 'react-native';
+import {SceneRendererProps, TabBar, TabView} from 'react-native-tab-view';
 import Introduction from './Introduction';
 import MediaList from './MediaList';
 
 interface IRoute {
-    title: string;
-    key: string;
-};
+  title: string;
+  key: string;
+}
 
-class Tab extends React.Component {
-    state = {
-        index: 1,
-        routes: [
-            {key: 'introduction', title: 'introduction'},
-            {key: 'channels', title: 'titles'}
-        ],
-    }
+interface IState {
+  routes: IRoute[];
+  index: number;
+}
 
-    onIndexChange = (indxe: number) => {
-        this.setState({
-            indxe,
-        });
-    }
+interface IProps {}
 
-    renderScene = ({route}: {
-        route: IRoute;
-    }) => {
-        switch (route.key) {
-            case 'introduction':
-                return <Introduction />;
-            case 'channels':
-                return <MediaList />
-        }
-        return null;
-    }
+class Tab extends React.Component<IProps, IState> {
+  state = {
+    index: 1,
+    routes: [
+      {key: 'introduction', title: 'introduction'},
+      {key: 'channels', title: 'titles'},
+    ],
+  };
 
-    render() {
-        return (
-            <TabView
-                navigationState={this.state}
-                onIndexChange={this.onIndexChange}
-                // @ts-expect-error
-                renderScene={this.renderScene}
-            >
-                <Text>Tab</Text>
-            </TabView>
-        );
+  onIndexChange = (index: number) => {
+    this.setState({
+      index,
+    });
+  };
+
+  renderScene = ({route}: {route: IRoute}) => {
+    switch (route.key) {
+      case 'introduction':
+        return <Introduction />;
+      case 'channels':
+        return <MediaList />;
     }
-};
+    return null;
+  };
+
+  renderTabBar = (props: any) => {
+    return (
+      <TabBar
+        {...props}
+        scrollEnabled
+        tabStyle={styles.tab}
+        labelStyle={styles.label}
+        style={styles.tabBar}
+        indicatorStyle={styles.indicator}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <TabView
+        navigationState={this.state}
+        onIndexChange={this.onIndexChange}
+        // @ts-expect-error
+        renderScene={this.renderScene}
+        renderTabBar={this.renderTabBar}>
+        <Text>Tab</Text>
+      </TabView>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  tab: {
+    width: 80,
+  },
+  label: {
+    color: '#333',
+  },
+  tabBar: {
+    backgroundColor: '#fff',
+    ...Platform.select({
+      android: {
+        elevation: 0,
+        borderBottomColor: '#e3e3e3',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+      },
+    }),
+  },
+  indicator: {
+    backgroundColor: '#eb6d48',
+    borderLeftWidth: 20,
+    borderRightWidth: 20,
+    borderColor: '#fff',
+  },
+});
 
 export default Tab;
