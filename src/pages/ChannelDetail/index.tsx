@@ -52,6 +52,7 @@ class ChannelDetail extends React.Component<IProps> {
           styles.header,
         ]}>
         <Image source={{uri: imageURL}} style={styles.backgroundImg} />
+        <BlurView blurAmount={10} blurType='light' style={StyleSheet.absoluteFillObject} />
         <View style={styles.leftView}>
           <Image source={{uri: imageURL}} style={styles.thumbnail} />
           <Image source={coverRight} style={styles.coverRight} />
