@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const CHANNEL_DETAIL_DATA_URL = '/mock/11/channeldetail';
 
-interface IProgram {
+export interface IProgram {
   id: string;
   title: string;
   playTimes: number;

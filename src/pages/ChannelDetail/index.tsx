@@ -7,6 +7,7 @@ import {RouteProp} from '@react-navigation/core';
 import {RootStackParamList} from '@/navigator/index';
 import coverRight from '@/assets/cover-right.png';
 import {BlurView} from '@react-native-community/blur';
+import Tab from './Tab';
 
 const mapStateToProps = ({channelDetail}: RootState) => {
   return {
@@ -37,7 +38,12 @@ class ChannelDetail extends React.Component<IProps> {
   }
 
   render() {
-    return <View>{this.renderHeader()}</View>;
+    return (
+      <View style={styles.container}>
+        {this.renderHeader()}
+        <Tab />
+      </View>
+    );
   }
 
   renderHeader() {
@@ -52,7 +58,11 @@ class ChannelDetail extends React.Component<IProps> {
           styles.header,
         ]}>
         <Image source={{uri: imageURL}} style={styles.backgroundImg} />
-        <BlurView blurAmount={10} blurType='light' style={StyleSheet.absoluteFillObject} />
+        <BlurView
+          blurAmount={10}
+          blurType="light"
+          style={StyleSheet.absoluteFillObject}
+        />
         <View style={styles.leftView}>
           <Image source={{uri: imageURL}} style={styles.thumbnail} />
           <Image source={coverRight} style={styles.coverRight} />
@@ -60,7 +70,9 @@ class ChannelDetail extends React.Component<IProps> {
         <View style={styles.rightView}>
           <Text style={styles.title}>{title}</Text>
           <View style={styles.summary}>
-            <Text numberOfLines={1} style={styles.summaryText}>{summary}</Text>
+            <Text numberOfLines={1} style={styles.summaryText}>
+              {summary}
+            </Text>
             <View style={styles.author}>
               <Image source={{uri: author.avatar}} style={styles.avatar} />
               <Text style={styles.authorName}>{author.name}</Text>
@@ -73,6 +85,9 @@ class ChannelDetail extends React.Component<IProps> {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   header: {
     height: 260,
     flexDirection: 'row',
@@ -80,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   leftView: {
-      marginRight: 26,
+    marginRight: 26,
   },
   thumbnail: {
     width: 98,
@@ -97,7 +112,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   rightView: {
-      flex: 1,
+    flex: 1,
   },
   title: {
     color: '#fff',
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   summaryText: {
-      color: '#fff',
+    color: '#fff',
   },
   summary: {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -124,7 +139,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   authorName: {
-      color: '#fff',
+    color: '#fff',
   },
   backgroundImg: {
     ...StyleSheet.absoluteFillObject,
