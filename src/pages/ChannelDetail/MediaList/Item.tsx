@@ -3,6 +3,7 @@ import {IProgram} from '@/models/channelDetail';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import _ from 'lodash';
+import IconFont from '@/assets/iconfont';
 
 interface IProps {
   data: IProgram;
@@ -25,11 +26,17 @@ class Item extends React.Component<IProps> {
         <View style={styles.content}>
           <Text style={styles.title}>{data.title}</Text>
           <View style={styles.info}>
-            <Text>{data.playTimes}</Text>
-            <Text>{data.duration}</Text>
+            <View style={styles.icon}>
+              <IconFont name="icon-listen" color="#939393" />
+              <Text style={styles.iconText}>{data.playTimes}</Text>
+            </View>
+            <View style={styles.icon}>
+              <IconFont name="icon-listen" color="#939393" />
+              <Text style={styles.iconText}>{data.duration}</Text>
+            </View>
           </View>
         </View>
-        <Text>{data.createdDate}</Text>
+        <Text style={styles.date}>{data.createdDate}</Text>
       </Touchable>
     );
   }
@@ -61,8 +68,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   icon: {
-      flexDirection: 'row',
-      marginRight: 10,
+    flexDirection: 'row',
+    marginRight: 10,
+  },
+  iconText: {
+      marginHorizontal: 5,
+      color: '#939393',
+  },
+  date: {
+    color: '#939393',
   }
 });
 
