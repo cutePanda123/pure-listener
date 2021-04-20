@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Animated} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
@@ -26,6 +26,8 @@ interface IProps extends ModelState {
 }
 
 class ChannelDetail extends React.Component<IProps> {
+  translateY = new Animated.Value(0);
+
   componentDidMount() {
     const {dispatch, route} = this.props;
     const {id} = route.params.item;
@@ -35,14 +37,37 @@ class ChannelDetail extends React.Component<IProps> {
         id,
       },
     });
+    Animated.timing(this.translateY, {
+      toValue: -170,
+      duration: 6000,
+      useNativeDriver: true,
+    }).start();
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            // backgroundColor: this.translateY.interpolate({
+            //   inputRange: [-170, 0],
+            //   outputRange: ['red', '#fff'],
+            // }),
+            // opacity: this.translateY.interpolate({
+            //   inputRange: [-170, 0],
+            //   outputRange: [1, 0],
+            // }),
+            transform: [
+              {
+                translateY: this.translateY,
+              },
+            ],
+          },
+        ]}>
         {this.renderHeader()}
         <Tab />
-      </View>
+      </Animated.View>
     );
   }
 
