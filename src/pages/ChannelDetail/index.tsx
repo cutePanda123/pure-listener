@@ -8,6 +8,12 @@ import {RootStackParamList} from '@/navigator/index';
 import coverRight from '@/assets/cover-right.png';
 import {BlurView} from '@react-native-community/blur';
 import Tab from './Tab';
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+  PanGestureHandlerStateChangeEvent,
+  State,
+} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({channelDetail}: RootState) => {
   return {
@@ -25,9 +31,15 @@ interface IProps extends ModelState {
   route: RouteProp<RootStackParamList, 'ChannelDetail'>;
 }
 
-class ChannelDetail extends React.Component<IProps> {
-  translateY = new Animated.Value(0);
+const HEADER_HEIGHT = 260;
+const USE_NATIVE_DRIVER = true;
 
+class ChannelDetail extends React.Component<IProps> {
+  range = [-(HEADER_HEIGHT - this.props.headerHeight), 0];
+  translationYValue = 0;
+  translaionYOffset = new Animated.Value(0);
+  translationY = new Animated.Value(0);
+  translateY = Animated.add(this.translationY, this.translaionYOffset);
   componentDidMount() {
     const {dispatch, route} = this.props;
     const {id} = route.params.item;
@@ -37,37 +49,68 @@ class ChannelDetail extends React.Component<IProps> {
         id,
       },
     });
-    Animated.timing(this.translateY, {
+    /*Animated.timing(this.translateY, {
       toValue: -170,
       duration: 6000,
       useNativeDriver: true,
-    }).start();
+    }).start();*/
   }
+
+  onGestureEvent = Animated.event(
+    [
+      {
+        nativeEvent: {
+          translationY: this.translationY,
+        },
+      },
+    ],
+    {
+      useNativeDriver: USE_NATIVE_DRIVER,
+    },
+  );
+
+  onHandlerStateChange = ({nativeEvent}: PanGestureHandlerStateChangeEvent) => {
+    if (nativeEvent.oldState === State.ACTIVE) {
+      let {translationY} = nativeEvent;
+      this.translaionYOffset.extractOffset();
+      this.translaionYOffset.setValue(translationY);
+      this.translaionYOffset.flattenOffset();
+      this.translationY.setValue(0);
+    }
+  };
 
   render() {
     return (
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            // backgroundColor: this.translateY.interpolate({
-            //   inputRange: [-170, 0],
-            //   outputRange: ['red', '#fff'],
-            // }),
-            // opacity: this.translateY.interpolate({
-            //   inputRange: [-170, 0],
-            //   outputRange: [1, 0],
-            // }),
-            transform: [
-              {
-                translateY: this.translateY,
-              },
-            ],
-          },
-        ]}>
-        {this.renderHeader()}
-        <Tab />
-      </Animated.View>
+      <PanGestureHandler onGestureEvent={this.onGestureEvent}
+      onHandlerStateChange={this.onHandlerStateChange}
+      >
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              // backgroundColor: this.translateY.interpolate({
+              //   inputRange: [-170, 0],
+              //   outputRange: ['red', '#fff'],
+              // }),
+              // opacity: this.translateY.interpolate({
+              //   inputRange: [-170, 0],
+              //   outputRange: [1, 0],
+              // }),
+              transform: [
+                {
+                  translateY: this.translateY.interpolate({
+                    inputRange: this.range,
+                    outputRange: this.range,
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
+            },
+          ]}>
+          {this.renderHeader()}
+          <Tab />
+        </Animated.View>
+      </PanGestureHandler>
     );
   }
 
@@ -114,7 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 260,
+    height: HEADER_HEIGHT,
     flexDirection: 'row',
     paddingHorizontal: 20,
     alignItems: 'center',
