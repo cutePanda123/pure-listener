@@ -14,6 +14,7 @@ import {
   PanGestureHandlerStateChangeEvent,
   State,
 } from 'react-native-gesture-handler';
+import {viewPortHeight} from '@/utils/';
 
 const mapStateToProps = ({channelDetail}: RootState) => {
   return {
@@ -76,14 +77,30 @@ class ChannelDetail extends React.Component<IProps> {
       this.translaionYOffset.setValue(translationY);
       this.translaionYOffset.flattenOffset();
       this.translationY.setValue(0);
+      this.translationYValue += translationY;
+      if (this.translationYValue < this.range[0]) {
+        this.translationYValue = this.range[0];
+        Animated.timing(this.translaionYOffset, {
+          toValue: this.range[0],
+          duration: 1000,
+          useNativeDriver: USE_NATIVE_DRIVER,
+        }).start();
+      } else if (this.translationYValue > this.range[1]) {
+        this.translationYValue = this.range[1];
+        Animated.timing(this.translaionYOffset, {
+          toValue: this.range[1],
+          duration: 1000,
+          useNativeDriver: USE_NATIVE_DRIVER,
+        }).start();
+      }
     }
   };
 
   render() {
     return (
-      <PanGestureHandler onGestureEvent={this.onGestureEvent}
-      onHandlerStateChange={this.onHandlerStateChange}
-      >
+      <PanGestureHandler
+        onGestureEvent={this.onGestureEvent}
+        onHandlerStateChange={this.onHandlerStateChange}>
         <Animated.View
           style={[
             styles.container,
@@ -108,7 +125,9 @@ class ChannelDetail extends React.Component<IProps> {
             },
           ]}>
           {this.renderHeader()}
-          <Tab />
+          <View style={{height: viewPortHeight - this.props.headerHeight}}>
+            <Tab />
+          </View>
         </Animated.View>
       </PanGestureHandler>
     );
