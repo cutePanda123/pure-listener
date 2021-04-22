@@ -1,6 +1,11 @@
-import {times} from 'lodash';
+import {tap, times} from 'lodash';
 import React from 'react';
 import {View, Text, StyleSheet, Platform} from 'react-native';
+import {
+  NativeViewGestureHandler,
+  PanGestureHandler,
+  TapGestureHandler,
+} from 'react-native-gesture-handler';
 import {SceneRendererProps, TabBar, TabView} from 'react-native-tab-view';
 import Introduction from './Introduction';
 import MediaList from './MediaList';
@@ -15,9 +20,13 @@ interface IState {
   index: number;
 }
 
-interface IProps {}
+export interface ITabProps {
+  panGestureHandlerRef: React.RefObject<PanGestureHandler>;
+  tapGestureHandlerRef: React.RefObject<TapGestureHandler>;
+  nativeGestureHandlerRef: React.RefObject<NativeViewGestureHandler>;
+}
 
-class Tab extends React.Component<IProps, IState> {
+class Tab extends React.Component<ITabProps, IState> {
   state = {
     index: 1,
     routes: [
@@ -33,11 +42,18 @@ class Tab extends React.Component<IProps, IState> {
   };
 
   renderScene = ({route}: {route: IRoute}) => {
+    const {panGestureHandlerRef, tapGestureHandlerRef, nativeGestureHandlerRef} = this.props;
     switch (route.key) {
       case 'introduction':
         return <Introduction />;
       case 'channels':
-        return <MediaList />;
+        return (
+          <MediaList
+            tapGestureHandlerRef={tapGestureHandlerRef}
+            panGestureHandlerRef={panGestureHandlerRef}
+            nativeGestureHandlerRef={nativeGestureHandlerRef}
+          />
+        );
     }
     return null;
   };

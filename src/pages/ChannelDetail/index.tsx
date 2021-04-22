@@ -9,10 +9,11 @@ import coverRight from '@/assets/cover-right.png';
 import {BlurView} from '@react-native-community/blur';
 import Tab from './Tab';
 import {
+  NativeViewGestureHandler,
   PanGestureHandler,
-  PanGestureHandlerGestureEvent,
   PanGestureHandlerStateChangeEvent,
   State,
+  TapGestureHandler,
 } from 'react-native-gesture-handler';
 import {viewPortHeight} from '@/utils/';
 
@@ -36,6 +37,9 @@ const HEADER_HEIGHT = 260;
 const USE_NATIVE_DRIVER = true;
 
 class ChannelDetail extends React.Component<IProps> {
+  panGestureHandlerRef = React.createRef<PanGestureHandler>();
+  tapGestureHandlerRef = React.createRef<TapGestureHandler>();
+  nativeGestureHandlerRef = React.createRef<NativeViewGestureHandler>();
   range = [-(HEADER_HEIGHT - this.props.headerHeight), 0];
   translationYValue = 0;
   translaionYOffset = new Animated.Value(0);
@@ -98,38 +102,48 @@ class ChannelDetail extends React.Component<IProps> {
 
   render() {
     return (
-      <PanGestureHandler
-        onGestureEvent={this.onGestureEvent}
-        onHandlerStateChange={this.onHandlerStateChange}>
-        <Animated.View
-          style={[
-            styles.container,
-            {
-              // backgroundColor: this.translateY.interpolate({
-              //   inputRange: [-170, 0],
-              //   outputRange: ['red', '#fff'],
-              // }),
-              // opacity: this.translateY.interpolate({
-              //   inputRange: [-170, 0],
-              //   outputRange: [1, 0],
-              // }),
-              transform: [
+      <TapGestureHandler ref={this.tapGestureHandlerRef}>
+        <View style={styles.container}>
+          <PanGestureHandler
+            ref={this.panGestureHandlerRef}
+            simultaneousHandlers={[this.tapGestureHandlerRef, this.nativeGestureHandlerRef]}
+            onGestureEvent={this.onGestureEvent}
+            onHandlerStateChange={this.onHandlerStateChange}>
+            <Animated.View
+              style={[
+                styles.container,
                 {
-                  translateY: this.translateY.interpolate({
-                    inputRange: this.range,
-                    outputRange: this.range,
-                    extrapolate: 'clamp',
-                  }),
+                  // backgroundColor: this.translateY.interpolate({
+                  //   inputRange: [-170, 0],
+                  //   outputRange: ['red', '#fff'],
+                  // }),
+                  // opacity: this.translateY.interpolate({
+                  //   inputRange: [-170, 0],
+                  //   outputRange: [1, 0],
+                  // }),
+                  transform: [
+                    {
+                      translateY: this.translateY.interpolate({
+                        inputRange: this.range,
+                        outputRange: this.range,
+                        extrapolate: 'clamp',
+                      }),
+                    },
+                  ],
                 },
-              ],
-            },
-          ]}>
-          {this.renderHeader()}
-          <View style={{height: viewPortHeight - this.props.headerHeight}}>
-            <Tab />
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
+              ]}>
+              {this.renderHeader()}
+              <View style={{height: viewPortHeight - this.props.headerHeight}}>
+                <Tab
+                  nativeGestureHandlerRef={this.nativeGestureHandlerRef}
+                  tapGestureHandlerRef={this.tapGestureHandlerRef}
+                  panGestureHandlerRef={this.panGestureHandlerRef}
+                />
+              </View>
+            </Animated.View>
+          </PanGestureHandler>
+        </View>
+      </TapGestureHandler>
     );
   }
 

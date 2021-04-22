@@ -5,6 +5,8 @@ import {connect, ConnectedProps} from 'react-redux';
 import {ListRenderItemInfo} from 'react-native';
 import {IProgram} from '@/models/channelDetail';
 import Item from './Item';
+import {NativeViewGestureHandler} from 'react-native-gesture-handler';
+import {ITabProps} from '../Tab';
 
 const mapStateToProps = ({channelDetail}: RootState) => {
   return {
@@ -15,7 +17,7 @@ const mapStateToProps = ({channelDetail}: RootState) => {
 const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 
-interface IProps extends ModelState {}
+type IProps = ModelState & ITabProps;
 
 class MediaList extends React.Component<IProps> {
   onPressItem = (data: IProgram) => {
@@ -30,14 +32,24 @@ class MediaList extends React.Component<IProps> {
   };
 
   render() {
-    const {list} = this.props;
+    const {
+      list,
+      panGestureHandlerRef,
+      tapGestureHandlerRef,
+      nativeGestureHandlerRef,
+    } = this.props;
     return (
-      <FlatList
-        style={styles.container}
-        data={list}
-        renderItem={this.renderItem}
-        keyExtractor={this.keyExtractor}
-      />
+      <NativeViewGestureHandler
+        simultaneousHandlers={[panGestureHandlerRef]}
+        waitFor={tapGestureHandlerRef}
+        ref={nativeGestureHandlerRef}>
+        <FlatList
+          style={styles.container}
+          data={list}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
+        />
+      </NativeViewGestureHandler>
     );
   }
 }
