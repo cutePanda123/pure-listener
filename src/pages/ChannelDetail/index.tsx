@@ -15,7 +15,9 @@ import {
   State,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
-import {viewPortHeight} from '@/utils/';
+import {viewPortHeight} from '@/utils/index';
+import { NativeSyntheticEvent } from 'react-native';
+import { NativeScrollEvent } from 'react-native';
 
 const mapStateToProps = ({channelDetail}: RootState) => {
   return {
@@ -44,7 +46,16 @@ class ChannelDetail extends React.Component<IProps> {
   translationYValue = 0;
   translaionYOffset = new Animated.Value(0);
   translationY = new Animated.Value(0);
-  translateY = Animated.add(this.translationY, this.translaionYOffset);
+  lastScrollY = new Animated.Value(0);
+  lastScrollYValue = 0;
+  reversedLastScrollY = Animated.multiply(
+    new Animated.Value(-1),
+    this.lastScrollY,
+  );
+  translateY = Animated.add(
+    Animated.add(this.translationY, this.reversedLastScrollY),
+    this.translaionYOffset,
+  );
   componentDidMount() {
     const {dispatch, route} = this.props;
     const {id} = route.params.item;
@@ -60,6 +71,24 @@ class ChannelDetail extends React.Component<IProps> {
       useNativeDriver: true,
     }).start();*/
   }
+
+  onScrollDrag = Animated.event(
+    [
+      {
+        nativeEvent: {
+          contentOffset: {
+            y: this.lastScrollY,
+          },
+        },
+      },
+    ],
+    {
+      useNativeDriver: USE_NATIVE_DRIVER,
+      listener: ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+        this.lastScrollYValue = nativeEvent.contentOffset.y;
+      }
+    },
+  );
 
   onGestureEvent = Animated.event(
     [
@@ -77,11 +106,13 @@ class ChannelDetail extends React.Component<IProps> {
   onHandlerStateChange = ({nativeEvent}: PanGestureHandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
       let {translationY} = nativeEvent;
+      translationY -= this.lastScrollYValue;
       this.translaionYOffset.extractOffset();
       this.translaionYOffset.setValue(translationY);
       this.translaionYOffset.flattenOffset();
       this.translationY.setValue(0);
       this.translationYValue += translationY;
+      let maxDeltaY = -this.range[0] - this.translationYValue;
       if (this.translationYValue < this.range[0]) {
         this.translationYValue = this.range[0];
         Animated.timing(this.translaionYOffset, {
@@ -89,6 +120,7 @@ class ChannelDetail extends React.Component<IProps> {
           duration: 1000,
           useNativeDriver: USE_NATIVE_DRIVER,
         }).start();
+        maxDeltaY = this.range[1];
       } else if (this.translationYValue > this.range[1]) {
         this.translationYValue = this.range[1];
         Animated.timing(this.translaionYOffset, {
@@ -96,17 +128,29 @@ class ChannelDetail extends React.Component<IProps> {
           duration: 1000,
           useNativeDriver: USE_NATIVE_DRIVER,
         }).start();
+        maxDeltaY = -this.range[0];
+      }
+      if (this.tapGestureHandlerRef.current) {
+        const tap: any = this.tapGestureHandlerRef.current;
+        tap.setNativeProps({
+          maxDeltaY,
+        });
       }
     }
   };
 
   render() {
     return (
-      <TapGestureHandler ref={this.tapGestureHandlerRef}>
+      <TapGestureHandler
+        ref={this.tapGestureHandlerRef}
+        maxDeltaY={-this.range[0]}>
         <View style={styles.container}>
           <PanGestureHandler
             ref={this.panGestureHandlerRef}
-            simultaneousHandlers={[this.tapGestureHandlerRef, this.nativeGestureHandlerRef]}
+            simultaneousHandlers={[
+              this.tapGestureHandlerRef,
+              this.nativeGestureHandlerRef,
+            ]}
             onGestureEvent={this.onGestureEvent}
             onHandlerStateChange={this.onHandlerStateChange}>
             <Animated.View
@@ -138,6 +182,7 @@ class ChannelDetail extends React.Component<IProps> {
                   nativeGestureHandlerRef={this.nativeGestureHandlerRef}
                   tapGestureHandlerRef={this.tapGestureHandlerRef}
                   panGestureHandlerRef={this.panGestureHandlerRef}
+                  onScrollDrag={this.onScrollDrag}
                 />
               </View>
             </Animated.View>

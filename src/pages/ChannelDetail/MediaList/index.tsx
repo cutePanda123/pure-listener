@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, Alert, StyleSheet} from 'react-native';
+import {View, Text, Animated, Alert, StyleSheet} from 'react-native';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {ListRenderItemInfo} from 'react-native';
@@ -37,17 +37,21 @@ class MediaList extends React.Component<IProps> {
       panGestureHandlerRef,
       tapGestureHandlerRef,
       nativeGestureHandlerRef,
+      onScrollDrag
     } = this.props;
     return (
       <NativeViewGestureHandler
         simultaneousHandlers={[panGestureHandlerRef]}
         waitFor={tapGestureHandlerRef}
         ref={nativeGestureHandlerRef}>
-        <FlatList
+        <Animated.FlatList
           style={styles.container}
           data={list}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
+          bounces={false}
+          onScrollBeginDrag={onScrollDrag}
+          onScrollEndDrag={onScrollDrag}
         />
       </NativeViewGestureHandler>
     );

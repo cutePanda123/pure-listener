@@ -1,12 +1,19 @@
 import {tap, times} from 'lodash';
 import React from 'react';
-import {View, Text, StyleSheet, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import {
   NativeViewGestureHandler,
   PanGestureHandler,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
-import {SceneRendererProps, TabBar, TabView} from 'react-native-tab-view';
+import {TabBar, TabView} from 'react-native-tab-view';
 import Introduction from './Introduction';
 import MediaList from './MediaList';
 
@@ -24,6 +31,7 @@ export interface ITabProps {
   panGestureHandlerRef: React.RefObject<PanGestureHandler>;
   tapGestureHandlerRef: React.RefObject<TapGestureHandler>;
   nativeGestureHandlerRef: React.RefObject<NativeViewGestureHandler>;
+  onScrollDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
 
 class Tab extends React.Component<ITabProps, IState> {
@@ -42,7 +50,12 @@ class Tab extends React.Component<ITabProps, IState> {
   };
 
   renderScene = ({route}: {route: IRoute}) => {
-    const {panGestureHandlerRef, tapGestureHandlerRef, nativeGestureHandlerRef} = this.props;
+    const {
+      panGestureHandlerRef,
+      tapGestureHandlerRef,
+      nativeGestureHandlerRef,
+      onScrollDrag
+    } = this.props;
     switch (route.key) {
       case 'introduction':
         return <Introduction />;
@@ -52,6 +65,7 @@ class Tab extends React.Component<ITabProps, IState> {
             tapGestureHandlerRef={tapGestureHandlerRef}
             panGestureHandlerRef={panGestureHandlerRef}
             nativeGestureHandlerRef={nativeGestureHandlerRef}
+            onScrollDrag={onScrollDrag}
           />
         );
     }
@@ -76,7 +90,6 @@ class Tab extends React.Component<ITabProps, IState> {
       <TabView
         navigationState={this.state}
         onIndexChange={this.onIndexChange}
-        // @ts-expect-error
         renderScene={this.renderScene}
         renderTabBar={this.renderTabBar}>
         <Text>Tab</Text>
