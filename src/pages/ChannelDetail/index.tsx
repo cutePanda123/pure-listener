@@ -4,7 +4,7 @@ import {useHeaderHeight} from '@react-navigation/stack';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {RouteProp} from '@react-navigation/core';
-import {RootStackParamList} from '@/navigator/index';
+import {RootStackNavigation, RootStackParamList} from '@/navigator/index';
 import coverRight from '@/assets/cover-right.png';
 import {BlurView} from '@react-native-community/blur';
 import Tab from './Tab';
@@ -33,6 +33,7 @@ type ModelState = ConnectedProps<typeof connector>;
 interface IProps extends ModelState {
   headerHeight: number;
   route: RouteProp<RootStackParamList, 'ChannelDetail'>;
+  navigation: RootStackNavigation;
 }
 
 const HEADER_HEIGHT = 260;
@@ -57,7 +58,7 @@ class ChannelDetail extends React.Component<IProps> {
     this.translaionYOffset,
   );
   componentDidMount() {
-    const {dispatch, route} = this.props;
+    const {dispatch, route, navigation} = this.props;
     const {id} = route.params.item;
     dispatch({
       type: 'channelDetail/fetchChannelDetail',
@@ -65,11 +66,12 @@ class ChannelDetail extends React.Component<IProps> {
         id,
       },
     });
-    /*Animated.timing(this.translateY, {
-      toValue: -170,
-      duration: 6000,
-      useNativeDriver: true,
-    }).start();*/
+    navigation.setParams({
+      opacity: this.translationY.interpolate({
+        inputRange: this.range,
+        outputRange: [1, 0],
+      }),
+    });
   }
 
   onScrollDrag = Animated.event(

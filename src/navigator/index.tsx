@@ -11,7 +11,7 @@ import ChannelDetail from '../pages/ChannelDetail';
 import {Platform, StatusBar, StyleSheet} from 'react-native';
 import Category from '../pages/Category';
 import {RouteProp} from '@react-navigation/core';
-import Animated from 'react-native-reanimated';
+import {Animated} from 'react-native';
 
 export type RootStackParamList = {
   BottomTabs: {
@@ -23,28 +23,36 @@ export type RootStackParamList = {
       id: string;
       title: string;
       imageURL: string;
-    }
+    };
+    opacity?: Animated.Value;
   };
 };
 
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
 
 function getChannelDetailOptions(routeProp: {
-  route: RouteProp<RootStackParamList, 'ChannelDetail'>
+  route: RouteProp<RootStackParamList, 'ChannelDetail'>;
 }) {
   return {
     headerTitle: routeProp.route.params.item.title,
     headerTransparent: true,
     headerTitleStyle: {
-      opacity: 0,
+      opacity: routeProp.route.params.opacity,
     },
     headerBackground: () => {
       return (
-        <Animated.View style={styles.headerBackground} />
+        <Animated.View
+          style={[
+            styles.headerBackground,
+            {
+              opacity: routeProp.route.params.opacity,
+            },
+          ]}
+        />
       );
     },
   };
-};
+}
 
 const styles = StyleSheet.create({
   headerBackground: {
