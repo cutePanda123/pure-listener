@@ -4,7 +4,7 @@ import {useHeaderHeight} from '@react-navigation/stack';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {RouteProp} from '@react-navigation/core';
-import {RootStackNavigation, RootStackParamList} from '@/navigator/index';
+import {ModalStackNavigation, RootStackParamList} from '@/navigator/index';
 import coverRight from '@/assets/cover-right.png';
 import {BlurView} from '@react-native-community/blur';
 import Tab from './Tab';
@@ -18,6 +18,7 @@ import {
 import {viewPortHeight} from '@/utils/index';
 import { NativeSyntheticEvent } from 'react-native';
 import { NativeScrollEvent } from 'react-native';
+import { IProgram } from '@/models/channelDetail';
 
 const mapStateToProps = ({channelDetail}: RootState) => {
   return {
@@ -33,7 +34,7 @@ type ModelState = ConnectedProps<typeof connector>;
 interface IProps extends ModelState {
   headerHeight: number;
   route: RouteProp<RootStackParamList, 'ChannelDetail'>;
-  navigation: RootStackNavigation;
+  navigation: ModalStackNavigation;
 }
 
 const HEADER_HEIGHT = 260;
@@ -195,8 +196,9 @@ class ChannelDetail extends React.Component<IProps> {
     );
   }
 
-  onItemPress() {
-    
+  onItemPress = (data: IProgram, index: number) => {
+    const {navigation} = this.props;
+    navigation.navigate("Detail");
   }
 
   renderHeader() {

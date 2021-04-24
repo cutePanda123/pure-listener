@@ -5,6 +5,7 @@ import {
   createStackNavigator,
   HeaderStyleInterpolators,
   StackNavigationProp,
+  TransitionPresets,
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import ChannelDetail from '../pages/ChannelDetail';
@@ -12,6 +13,8 @@ import {Platform, StatusBar, StyleSheet} from 'react-native';
 import Category from '../pages/Category';
 import {RouteProp} from '@react-navigation/core';
 import {Animated} from 'react-native';
+import Account from '@/pages/Account';
+import IconFont from '@/assets/iconfont';
 
 export type RootStackParamList = {
   BottomTabs: {
@@ -60,6 +63,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     opacity: 0,
   },
+  headerBackImage: {
+    marginHorizontal: Platform.OS === 'android' ? 0 : 8,
+  },
 });
 
 let Stack = createStackNavigator<RootStackParamList>();
@@ -75,11 +81,44 @@ export type ModalStackNavigation = StackNavigationProp<ModalStackParamList>;
 
 function ModalStackScreen() {
   return (
-    <ModalStack.Navigator mode="modal" headerMode="screen">
-      <ModalStack.Screen name="Root" component={RootStackScreen} options={{headerShown: false}} />
-      <ModalStack.Screen name="Detail" component={ChannelDetail} />
+    <ModalStack.Navigator
+      mode="modal"
+      headerMode="screen"
+      screenOptions={{
+        headerTitleAlign: 'center',
+        gestureEnabled: true,
+        ...TransitionPresets.ModalSlideFromBottomIOS,
+        headerBackTitleVisible: false,
+      }}>
+      <ModalStack.Screen
+        name="Root"
+        component={RootStackScreen}
+        options={{headerShown: false}}
+      />
+      <ModalStack.Screen
+        name="Detail"
+        component={Account}
+        options={{
+          headerTintColor: '#fff',
+          headerTitle: '',
+          headerTransparent: true,
+          cardStyle = {
+            backgroundColor: '#807c66',
+          },
+          headerBackImage: ({tintColor}) => {
+            return (
+              <IconFont
+                name="icon-down"
+                size={30}
+                color={tintColor}
+                style={styles.headerBackImage}
+              />
+            );
+          },
+        }}
+      />
     </ModalStack.Navigator>
-  )
+  );
 }
 
 class Navigator extends React.Component {
@@ -95,49 +134,49 @@ class Navigator extends React.Component {
 function RootStackScreen() {
   return (
     <Stack.Navigator
-          headerMode="float"
-          screenOptions={{
-            headerTitleAlign: 'center',
-            headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-            gestureEnabled: true,
-            gestureDirection: 'horizontal',
-            ...Platform.select({
-              android: {
-                headerStatusBarHeight: StatusBar.currentHeight,
-              },
-            }),
-            headerBackTitleVisible: false,
-            headerTintColor: '#333',
-            headerStyle: {
-              ...Platform.select({
-                android: {
-                  elevation: 0,
-                  borderBottomWidth: StyleSheet.hairlineWidth,
-                },
-              }),
+      headerMode="float"
+      screenOptions={{
+        headerTitleAlign: 'center',
+        headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+        ...Platform.select({
+          android: {
+            headerStatusBarHeight: StatusBar.currentHeight,
+          },
+        }),
+        headerBackTitleVisible: false,
+        headerTintColor: '#333',
+        headerStyle: {
+          ...Platform.select({
+            android: {
+              elevation: 0,
+              borderBottomWidth: StyleSheet.hairlineWidth,
             },
-          }}>
-          <Stack.Screen
-            options={{
-              headerTitle: 'Home',
-            }}
-            name="BottomTabs"
-            component={BottomTabs}
-          />
-          <Stack.Screen
-            options={{
-              headerTitle: 'Category',
-            }}
-            name="Category"
-            component={Category}
-          />
-          <Stack.Screen
-            options={getChannelDetailOptions}
-            name="ChannelDetail"
-            component={ChannelDetail}
-          />
-        </Stack.Navigator>
+          }),
+        },
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Home',
+        }}
+        name="BottomTabs"
+        component={BottomTabs}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Category',
+        }}
+        name="Category"
+        component={Category}
+      />
+      <Stack.Screen
+        options={getChannelDetailOptions}
+        name="ChannelDetail"
+        component={ChannelDetail}
+      />
+    </Stack.Navigator>
   );
 }
 
