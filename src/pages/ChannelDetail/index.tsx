@@ -185,6 +185,7 @@ class ChannelDetail extends React.Component<IProps> {
                   tapGestureHandlerRef={this.tapGestureHandlerRef}
                   panGestureHandlerRef={this.panGestureHandlerRef}
                   onScrollDrag={this.onScrollDrag}
+                  onItemPress={this.onItemPress}
                 />
               </View>
             </Animated.View>
@@ -192,6 +193,10 @@ class ChannelDetail extends React.Component<IProps> {
         </View>
       </TapGestureHandler>
     );
+  }
+
+  onItemPress() {
+    
   }
 
   renderHeader() {

@@ -63,11 +63,38 @@ const styles = StyleSheet.create({
 });
 
 let Stack = createStackNavigator<RootStackParamList>();
+
+export type ModalStackParamList = {
+  Root: undefined;
+  Detail: undefined;
+};
+
+const ModalStack = createStackNavigator<ModalStackParamList>();
+
+export type ModalStackNavigation = StackNavigationProp<ModalStackParamList>;
+
+function ModalStackScreen() {
+  return (
+    <ModalStack.Navigator mode="modal" headerMode="screen">
+      <ModalStack.Screen name="Root" component={RootStackScreen} options={{headerShown: false}} />
+      <ModalStack.Screen name="Detail" component={ChannelDetail} />
+    </ModalStack.Navigator>
+  )
+}
+
 class Navigator extends React.Component {
   render(): JSX.Element {
     return (
       <NavigationContainer>
-        <Stack.Navigator
+        <ModalStackScreen />
+      </NavigationContainer>
+    );
+  }
+}
+
+function RootStackScreen() {
+  return (
+    <Stack.Navigator
           headerMode="float"
           screenOptions={{
             headerTitleAlign: 'center',
@@ -111,9 +138,7 @@ class Navigator extends React.Component {
             component={ChannelDetail}
           />
         </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+  );
 }
 
 export default Navigator;

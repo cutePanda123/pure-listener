@@ -8,14 +8,14 @@ import IconFont from '@/assets/iconfont';
 interface IProps {
   data: IProgram;
   index: number;
-  onPress: (data: IProgram) => void;
+  onPress: (data: IProgram, index: number) => void;
 }
 
 class Item extends React.Component<IProps> {
   onPress = () => {
-    const {onPress, data} = this.props;
+    const {onPress, data, index} = this.props;
     if (_.isFunction(onPress)) {
-      onPress(data);
+      onPress(data, index);
     }
   };
   render() {

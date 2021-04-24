@@ -1,7 +1,6 @@
-import {tap, times} from 'lodash';
+import { IProgram } from '@/models/channelDetail';
 import React from 'react';
 import {
-  View,
   Text,
   StyleSheet,
   Platform,
@@ -32,6 +31,7 @@ export interface ITabProps {
   tapGestureHandlerRef: React.RefObject<TapGestureHandler>;
   nativeGestureHandlerRef: React.RefObject<NativeViewGestureHandler>;
   onScrollDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onItemPress: (data: IProgram, index: number) => void;
 }
 
 class Tab extends React.Component<ITabProps, IState> {
@@ -54,7 +54,8 @@ class Tab extends React.Component<ITabProps, IState> {
       panGestureHandlerRef,
       tapGestureHandlerRef,
       nativeGestureHandlerRef,
-      onScrollDrag
+      onScrollDrag,
+      onItemPress
     } = this.props;
     switch (route.key) {
       case 'introduction':
@@ -66,6 +67,7 @@ class Tab extends React.Component<ITabProps, IState> {
             panGestureHandlerRef={panGestureHandlerRef}
             nativeGestureHandlerRef={nativeGestureHandlerRef}
             onScrollDrag={onScrollDrag}
+            onItemPress={onItemPress}
           />
         );
     }

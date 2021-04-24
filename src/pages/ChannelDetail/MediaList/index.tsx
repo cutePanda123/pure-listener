@@ -20,8 +20,9 @@ type ModelState = ConnectedProps<typeof connector>;
 type IProps = ModelState & ITabProps;
 
 class MediaList extends React.Component<IProps> {
-  onPressItem = (data: IProgram) => {
-    alert('hello');
+  onPressItem = (data: IProgram, index: number) => {
+    const {onItemPress} = this.props;
+    onItemPress(data, index);
   };
   renderItem = ({item, index}: ListRenderItemInfo<IProgram>) => {
     return <Item data={item} index={index} onPress={this.onPressItem} />;
