@@ -3,13 +3,14 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
+import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
 import Home from '@/pages/Home';
 import {StyleSheet} from 'react-native';
 import TopTabBarWrapper from '@/pages/Views/TopTabBarWrapper';
 import {RootState} from '../models';
 import {connect, ConnectedProps} from 'react-redux';
 import {ICategory} from '@/models/category';
-import { createHomeModel } from '@/config/dva';
+import {createHomeModel} from '@/config/dva';
 
 export type HomeParamList = {
   [key: string]: {
@@ -59,6 +60,7 @@ class HomeTabs extends React.Component<IProps> {
       <Tab.Navigator
         lazy={true}
         tabBar={this.renderTabBar}
+        pager={(props) => <ViewPagerAdapter {...props} />}
         sceneContainerStyle={styles.sceneContainer}
         tabBarOptions={{
           scrollEnabled: true,
