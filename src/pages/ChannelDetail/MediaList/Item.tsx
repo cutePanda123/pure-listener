@@ -8,14 +8,15 @@ import IconFont from '@/assets/iconfont';
 interface IProps {
   data: IProgram;
   index: number;
-  onPress: (data: IProgram, index: number) => void;
+  onPressItem: (data: IProgram, index: number) => void;
 }
 
-class Item extends React.Component<IProps> {
+class Item extends React.PureComponent<IProps> {
   onPress = () => {
-    const {onPress, data, index} = this.props;
-    if (_.isFunction(onPress)) {
-      onPress(data, index);
+    const {onPressItem, data, index} = this.props;
+    console.log("!!!!!!!!@@@@@");
+    if (_.isFunction(onPressItem)) {
+      onPressItem(data, index);
     }
   };
   render() {
@@ -31,7 +32,7 @@ class Item extends React.Component<IProps> {
               <Text style={styles.iconText}>{data.playTimes}</Text>
             </View>
             <View style={styles.icon}>
-              <IconFont name="icon-listen" color="#939393" />
+              <IconFont name="icon-time" color="#939393" />
               <Text style={styles.iconText}>{data.duration}</Text>
             </View>
           </View>

@@ -19,13 +19,14 @@ type ModelState = ConnectedProps<typeof connector>;
 
 type IProps = ModelState & ITabProps;
 
-class MediaList extends React.Component<IProps> {
+class MediaList extends React.PureComponent<IProps> {
   onPressItem = (data: IProgram, index: number) => {
     const {onItemPress} = this.props;
+    console.log("!!!!!!!!!");
     onItemPress(data, index);
   };
   renderItem = ({item, index}: ListRenderItemInfo<IProgram>) => {
-    return <Item data={item} index={index} onPress={this.onPressItem} />;
+    return <Item data={item} index={index} onPressItem={this.onPressItem} />;
   };
 
   keyExtractor = (item: IProgram) => {
@@ -38,7 +39,7 @@ class MediaList extends React.Component<IProps> {
       panGestureHandlerRef,
       tapGestureHandlerRef,
       nativeGestureHandlerRef,
-      onScrollDrag
+      onScrollDrag,
     } = this.props;
     return (
       <NativeViewGestureHandler

@@ -40,7 +40,7 @@ interface IProps extends ModelState {
 const HEADER_HEIGHT = 260;
 const USE_NATIVE_DRIVER = true;
 
-class ChannelDetail extends React.Component<IProps> {
+class ChannelDetail extends React.PureComponent<IProps> {
   panGestureHandlerRef = React.createRef<PanGestureHandler>();
   tapGestureHandlerRef = React.createRef<TapGestureHandler>();
   nativeGestureHandlerRef = React.createRef<NativeViewGestureHandler>();
@@ -198,6 +198,7 @@ class ChannelDetail extends React.Component<IProps> {
 
   onItemPress = (data: IProgram, index: number) => {
     const {navigation} = this.props;
+    console.log("navigation !!!!!!!!!!!! {}", navigation);
     navigation.navigate("Detail");
   }
 
