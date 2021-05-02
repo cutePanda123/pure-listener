@@ -15,6 +15,7 @@ import {RouteProp} from '@react-navigation/core';
 import {Animated} from 'react-native';
 import Account from '@/pages/Account';
 import IconFont from '@/assets/iconfont';
+import Detail from '@/pages/Detail';
 
 export type RootStackParamList = {
   BottomTabs: {
@@ -97,12 +98,12 @@ function ModalStackScreen() {
       />
       <ModalStack.Screen
         name="Detail"
-        component={Account}
+        component={Detail}
         options={{
           headerTintColor: '#fff',
           headerTitle: '',
           headerTransparent: true,
-          cardStyle = {
+          cardStyle: {
             backgroundColor: '#807c66',
           },
           headerBackImage: ({tintColor}) => {
