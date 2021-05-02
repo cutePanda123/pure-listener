@@ -39,7 +39,7 @@ class Tab extends React.Component<ITabProps, IState> {
     index: 1,
     routes: [
       {key: 'introduction', title: 'introduction'},
-      {key: 'channels', title: 'titles'},
+      {key: 'channels', title: 'channels'},
     ],
   };
 
